@@ -1,0 +1,42 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: api
+  namespace: flux-system
+spec:
+  interval: 1m
+  dependsOn:
+    - name: infrastructure
+  path: "./k8s/overlays/staging/api"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: api
+  validation: client
+  healthChecks:
+    - kind: Deployment
+      name: api
+      namespace: api
+  timeout: 80s
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: client
+  namespace: flux-system
+spec:
+  interval: 1m
+  dependsOn:
+    - name: infrastructure
+  path: "./k8s/overlays/staging/client"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: client
+  validation: client
+  healthChecks:
+    - kind: Deployment
+      name: client
+      namespace: client
+  timeout: 80s
