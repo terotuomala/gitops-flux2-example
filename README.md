@@ -152,7 +152,7 @@ $ brew install k3d
 ## Usage :keyboard:
 Create k3s cluster using k3d:
 ```sh
-$ k3d cluster create k3s-gitops-example --agents 2 --update-default-kubeconfig
+$ k3d cluster create gitops-example-staging --agents 2 --update-default-kubeconfig
 ```
 Make sure your KUBECONFIG points to k3s cluster context:
 ```sh
@@ -165,7 +165,7 @@ $ flux check --pre
 Install Flux and configure it to manage itself from a Git repository:
 ```sh
 $ flux bootstrap github \
-    --context=staging \
+    --context=k3d-gitops-example-staging \
     --owner=${GITHUB_USER} \
     --repository=${GITHUB_REPO} \
     --branch=main \
