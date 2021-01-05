@@ -2,10 +2,8 @@
 
 An example GitOps workflow using [Flux2](https://github.com/fluxcd/flux2) and [Flagger](https://github.com/weaveworks/flagger).
 
-https://github.com/fluxcd/kustomize-controller
-
 <!-- TABLE OF CONTENTS -->
-## Table of Contents :card_file_box: 
+## Table of Contents 
 * [Features](#features)
 * [Kubernetes Objects](#kubernetes-objects)
 * [Prerequisites](#prerequisites)
@@ -13,7 +11,7 @@ https://github.com/fluxcd/kustomize-controller
 * [Kustomize configuration](#kustomize-configuration)
 
 <!-- FEATURES -->
-## Features :rocket: 
+## :rocket: Features 
 - Local [K3s](https://github.com/rancher/k3s) Cluster using [K3d](https://github.com/rancher/k3d)
 - Example application including Client ([React](https://reactjs.org/)), REST API ([Node.js](https://nodejs.org/en/) + [Express](https://expressjs.com/)) and Cache ([Redis](https://redis.io/))
 - Application configuration customization using [Kustomize](https://github.com/kubernetes-sigs/kustomize)
@@ -26,7 +24,7 @@ https://github.com/fluxcd/kustomize-controller
 - Kubernetes manifest validation using [pre-commit](https://github.com/pre-commit/pre-commit)
 
 <!-- KUBERNETES OBJECTS -->
-## Kubernetes Objects :blue_book:
+## :blue_book: Kubernetes Objects
 The following applications and xxx runs in Kubernetes Cluster:
 
 | Type |   | Client   | REST API   | Cache |
@@ -41,7 +39,7 @@ The following applications and xxx runs in Kubernetes Cluster:
 | Network Policy | <img src="https://github.com/kubernetes/community/blob/master/icons/svg/resources/unlabeled/netpol.svg" alt="Network Policy" title="Network Policy resource" width="34,39" height="33" /> | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Horizontal Pod Autoscaler | <img src="https://github.com/kubernetes/community/blob/master/icons/svg/resources/unlabeled/hpa.svg" alt="Horizontal Pod Autoscaler" title="Horizontal Pod Autoscaler resource" width="34,39" height="33" /> | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 
-## Folder structure
+## :card_file_box: Folder structure
 The folders are structured based on 
 
 - **apps** dir contains Helm releases with a custom configuration per cluster
@@ -118,8 +116,8 @@ The apps configuration is structured into:
 ```
 
 <!-- PREREQUISITES -->
-## Prerequisites :hammer_and_wrench:
-**NB.** The setup is tested on `macOS Catalina`.
+## :hammer_and_wrench: Prerequisites
+**NB.** The setup is tested on `macOS Big Sur`.
 
 Docker Desktop [installed](https://docs.docker.com/install/)
 ```sh
@@ -138,27 +136,22 @@ flux [installed](https://toolkit.fluxcd.io/guides/installation/)
 $ brew install fluxcd/tap/flux
 ```
 
-kustomize (at least version 3.8.8) [installed](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/INSTALL.md)
-```sh
-brew install kustomize
-```
-
 k3d (at least version v3.4.0) [installed](https://github.com/rancher/k3d)
 ```sh
 $ brew install k3d
 ```
 
 <!-- USAGE -->
-## Usage :keyboard:
-Create k3s cluster using k3d:
+## :keyboard: Usage
+Create staging k3s cluster using k3d:
 ```sh
 $ k3d cluster create gitops-example-staging --agents 2 --update-default-kubeconfig
 ```
-Make sure your KUBECONFIG points to k3s cluster context:
+Make sure your KUBECONFIG points to staging k3s cluster context:
 ```sh
 $ kubectl get nodes
 ```
-Verify that k3s cluster satisfies the prerequisites:
+Verify that staging k3s cluster satisfies the prerequisites:
 ```sh
 $ flux check --pre
 ```
