@@ -3,6 +3,6 @@ kind: Kustomization
 namespace: flux-system
 resources:
   - bitnami.yml
-  #- sealed-secrets.yml
-  #- api.yml
-  #- client.yml
+  - sealed-secrets.yml
+  - api.yml
+  - client.yml
