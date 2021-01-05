@@ -1,11 +1,11 @@
-# GitOps-Flux2-Example
+# GitOps workflow example using Flux2
 
-An example GitOps workflow using [Flux2](https://github.com/fluxcd/flux2) and [Flagger](https://github.com/weaveworks/flagger).
+> Inspired by excellent [Flux2 example](https://github.com/fluxcd/flux2-kustomize-helm-example).
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents 
 * [Features](#features)
-* [Kubernetes Objects](#kubernetes-objects)
+* [Example application](#example-application)
 * [Prerequisites](#prerequisites)
 * [Usage](#usage)
 * [Kustomize configuration](#kustomize-configuration)
@@ -13,7 +13,7 @@ An example GitOps workflow using [Flux2](https://github.com/fluxcd/flux2) and [F
 <!-- FEATURES -->
 ## :rocket: Features 
 - Local [K3s](https://github.com/rancher/k3s) Cluster using [K3d](https://github.com/rancher/k3d)
-- Example application including Client ([React](https://reactjs.org/)), REST API ([Node.js](https://nodejs.org/en/) + [Express](https://expressjs.com/)) and Cache ([Redis](https://redis.io/))
+- Example application (separate repositories) including [Client](https://github.com/terotuomala/k8s-create-react-app-example) (Create React App) and [REST API](https://github.com/terotuomala/k8s-express-api-example) (Node.js + Express + Redis)
 - Application configuration customization using [Kustomize](https://github.com/kubernetes-sigs/kustomize)
 - Continuous Delivery with GitOps workflow using [Flux2](https://github.com/fluxcd/flux2)
 - Progressive delivery with canary releases using [Flagger](https://github.com/weaveworks/flagger)
@@ -23,35 +23,14 @@ An example GitOps workflow using [Flux2](https://github.com/fluxcd/flux2) and [F
 - Environment variable loading based on the present working directory using [direnv](https://github.com/direnv/direnv)
 - Kubernetes manifest validation using [pre-commit](https://github.com/pre-commit/pre-commit)
 
-<!-- KUBERNETES OBJECTS -->
-## :blue_book: Kubernetes Objects
-The following applications and xxx runs in Kubernetes Cluster:
-
-| Type |   | Client   | REST API   | Cache |
-|:----------|---|:--------:|:----------:|:-------:|
-| Ingress | <img src="https://github.com/kubernetes/community/blob/master/icons/svg/resources/unlabeled/ing.svg" alt="Ingress" title="Ingress resource" width="34,39" height="33" /> | :heavy_check_mark: | :heavy_check_mark: | :x:  |
-| Service | <img src="https://github.com/kubernetes/community/blob/master/icons/svg/resources/unlabeled/svc.svg" alt="Service" title="Service resource" width="34,39" height="33" /> | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Deployment | <img src="https://github.com/kubernetes/community/blob/master/icons/svg/resources/unlabeled/deploy.svg" alt="Deployment" title="Deployment resource" width="34,39" height="33" /> | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Config Map | <img src="https://github.com/kubernetes/community/blob/master/icons/svg/resources/unlabeled/cm.svg" alt="Config Map" title="Config Map resource" width="34,39" height="33" /> | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Secret | <img src="https://github.com/kubernetes/community/blob/master/icons/svg/resources/unlabeled/secret.svg" alt="Secret" title="Secret resource" width="34,39" height="33" /> | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Pod Disruption Budget | <img src="https://github.com/kubernetes/community/blob/master/icons/svg/resources/unlabeled/quota.svg" alt="Pod Disruption Budget" title="Pod Disruption Budget resource" width="34,39" height="33" /> | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Cluster Policy | <img src="https://github.com/kubernetes/community/blob/master/icons/svg/resources/unlabeled/psp.svg" alt="Cluster Policy" title="Kyverno Cluster Policy resource" width="34,39" height="33" /> | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Network Policy | <img src="https://github.com/kubernetes/community/blob/master/icons/svg/resources/unlabeled/netpol.svg" alt="Network Policy" title="Network Policy resource" width="34,39" height="33" /> | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Horizontal Pod Autoscaler | <img src="https://github.com/kubernetes/community/blob/master/icons/svg/resources/unlabeled/hpa.svg" alt="Horizontal Pod Autoscaler" title="Horizontal Pod Autoscaler resource" width="34,39" height="33" /> | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+<!-- EXAMPLE APPLICATION -->
+## :performing_arts: Example Application
+The example application consist from Client and REST API with Cache. 
 
 ## :card_file_box: Folder structure
-The folders are structured based on 
+The folders are structured based on the [Flux2 example](https://github.com/fluxcd/flux2-kustomize-helm-example).
 
-- **apps** dir contains Helm releases with a custom configuration per cluster
-- **infrastructure** dir contains common infra tools such as NGINX ingress controller and Helm repository definitions
-- **clusters** dir contains the Flux configuration per cluster
-
-```sh
-├── apps
-│   ├── base
-│   └── overlays
-│       ├── staging
-│       └── production
+```
 ├── infrastructure
 │   ├── nginx
 │   ├── redis
@@ -60,60 +39,64 @@ The folders are structured based on
     ├── staging
     └── production
 ```
+### Infrastructure
+Includes `nginx` and `redis` configurations as well as `Helm Repository` definitions. It also includes example application `Git Repository` definitions ([api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) and [client.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/client.yaml))
 
-The apps configuration is structured into:
-
-- **apps/base/** dir contains namespaces and Helm release definitions
-- **apps/production/** dir contains the production Helm release values
-- **apps/staging/** dir contains the staging values
-
-```sh
-├── base
-│   ├── api
-│   │   ├── deployment.yml
-│   │   ├── configmap.yml
-│   │   ├── hpa.yml
-│   │   ├── ingress.yml
-│   │   ├── kustomization.yml
-│   │   └── service.yml
-│   ├── cache
-│   │   ├── deployment.yml
-│   │   ├── configmap.yml
-│   │   ├── hpa.yml
-│   │   ├── kustomization.yml
-│   │   └── service.yml
-│   └── client
-│       ├── deployment.yml
-│       ├── configmap.yml
-│       ├── hpa.yml
-│       ├── ingress.yml
-│       ├── kustomization.yml
-│       └── service.yml
-└── overlays
-    ├── staging
-    │   ├── deployment-patch.yaml
-    │   ├── hpa-patch.yaml
+```
+└── infrastructure
+    ├── nginx
     │   ├── kustomization.yaml
-    └── production
-        ├── deployment-patch.yaml
-        ├── hpa-patch.yaml
+    │   ├── namespace.yaml
+    │   └── release.yaml
+    ├── redis
+    │   ├── kustomization.yaml
+    │   ├── kustomizeconfig.yaml
+    │   ├── namespace.yaml
+    │   ├── release.yaml
+    │   └── values.yaml
+    └── sources
+        ├── api.yaml
+        ├── bitnami.yaml
+        ├── client.yaml
         └── kustomization.yaml
 ```
 
+### Clusters
+Includes the Flux configuration per cluster.
+
 ```
-./apps/
-├── base
-│   └── api
-│       ├── kustomization.yaml
-│       ├── namespace.yaml
-│       └── release.yaml
-├── production
-│   ├── kustomization.yaml
-│   └── podinfo-patch.yaml
-└── staging
-    ├── kustomization.yaml
-    └── podinfo-patch.yaml
+└── clusters
+    ├── production
+    │   ├── apps.yaml
+    │   └── infrastructure.yaml
+    └── staging
+        ├── apps.yaml
+        └── infrastructure.yaml
 ```
+
+The `<CLUSTER_ENVIRONMENT>/apps.yaml` defines the path for Kustomize patch which includes the environment specific values. Note that the path refers to different repository. For example the [infrastructure/sources/api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) refers to repository https://github.com/terotuomala/k8s-express-api-example which has the Kustomization files in `k8s/<CLUSTER_ENVIRONMENT>/api` directory.
+```
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: api
+  namespace: flux-system
+spec:
+  interval: 1m
+  dependsOn:
+    - name: infrastructure
+  path: "./k8s/staging/api"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: api
+  validation: client
+  healthChecks:
+    - kind: Deployment
+      name: api
+      namespace: api
+  timeout: 80s
+  ```
 
 <!-- PREREQUISITES -->
 ## :hammer_and_wrench: Prerequisites
@@ -126,17 +109,17 @@ Docker Desktop [installed](https://docs.docker.com/install/)
 $ curl -s https://download.docker.com/mac/stable/Docker.dmg
 ```
 
-kubectl (at least version 1.18) [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+Kubectl (at least version 1.18) [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 ```sh
 $ brew install kubernetes-cli
 ```
 
-flux [installed](https://toolkit.fluxcd.io/guides/installation/)
+Flux CLI [installed](https://toolkit.fluxcd.io/guides/installation/)
 ```sh
 $ brew install fluxcd/tap/flux
 ```
 
-k3d (at least version v3.4.0) [installed](https://github.com/rancher/k3d)
+K3d (at least version v3.4.0) [installed](https://github.com/rancher/k3d)
 ```sh
 $ brew install k3d
 ```
