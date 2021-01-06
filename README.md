@@ -12,7 +12,7 @@
 
 <!-- FEATURES -->
 ## :rocket: Features 
-- Local [K3s](https://github.com/rancher/k3s) Cluster using [K3d](https://github.com/rancher/k3d)
+- Local [K3s](https://github.com/rancher/k3s) staging and production clusters  using [K3d](https://github.com/rancher/k3d)
 - Example application (separate repositories) including [Client](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
 - Application configuration customization using [Kustomize](https://github.com/kubernetes-sigs/kustomize)
 - Continuous Delivery with GitOps workflow using [Flux2](https://github.com/fluxcd/flux2)
@@ -127,15 +127,25 @@ K3d (at least version v3.4.0) [installed](https://github.com/rancher/k3d)
 $ brew install k3d
 ```
 
+Direnv [installed](https://direnv.net/docs/installation.html)
+```sh
+$ brew install direnv
+```
+
+Kubectx [installed](https://github.com/ahmetb/kubectx)
+```sh
+$ brew install kubectx
+```
+
 <!-- USAGE -->
 ## :keyboard: Usage
-Create staging k3s cluster using k3d:
+Create a local `staging` k3s cluster:
 ```sh
-$ k3d cluster create gitops-example-staging --agents 2 --update-default-kubeconfig
+$ k3d cluster create gitops-example-staging --agents 1 --update-default-kubeconfig
 ```
 Make sure your KUBECONFIG points to staging k3s cluster context:
 ```sh
-$ kubectl get nodes
+$ kubectx k3d-gitops-example-staging
 ```
 Verify that staging k3s cluster satisfies the prerequisites:
 ```sh
@@ -150,4 +160,26 @@ $ flux bootstrap github \
     --branch=main \
     --personal \
     --path=clusters/staging
+```
+Next create local `production` k3s cluster:
+```sh
+$ k3d cluster create gitops-example-production --agents 1 --update-default-kubeconfig
+```
+Make sure your KUBECONFIG points to production k3s cluster context:
+```sh
+$ kubectx k3d-gitops-example-production
+```
+Verify that production k3s cluster satisfies the prerequisites:
+```sh
+$ flux check --pre
+```
+Install Flux and configure it to manage itself from a Git repository:
+```sh
+$ flux bootstrap github \
+    --context=k3d-gitops-example-production \
+    --owner=${GITHUB_USER} \
+    --repository=${GITHUB_REPO} \
+    --branch=main \
+    --personal \
+    --path=clusters/production
 ```
