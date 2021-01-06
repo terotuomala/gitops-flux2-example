@@ -13,7 +13,7 @@
 <!-- FEATURES -->
 ## :rocket: Features 
 - Local [K3s](https://github.com/rancher/k3s) Cluster using [K3d](https://github.com/rancher/k3d)
-- Example application (separate repositories) including [Client](https://github.com/terotuomala/k8s-create-react-app-example) (Create React App) and [REST API](https://github.com/terotuomala/k8s-express-api-example) (Node.js + Express + Redis)
+- Example application (separate repositories) including [Client](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
 - Application configuration customization using [Kustomize](https://github.com/kubernetes-sigs/kustomize)
 - Continuous Delivery with GitOps workflow using [Flux2](https://github.com/fluxcd/flux2)
 - Progressive delivery with canary releases using [Flagger](https://github.com/weaveworks/flagger)
@@ -25,7 +25,7 @@
 
 <!-- EXAMPLE APPLICATION -->
 ## :performing_arts: Example Application
-The example application consist from Client and REST API with Cache. 
+The example application consist from [Client](https://github.com/terotuomala/k8s-create-react-app-example) (Create React App) and [REST API](https://github.com/terotuomala/k8s-express-api-example) with Cache (Node.js + Express + Redis)
 
 ## :card_file_box: Folder structure
 The folders are structured based on the [Flux2 example](https://github.com/fluxcd/flux2-kustomize-helm-example).
@@ -107,11 +107,9 @@ spec:
 ## :hammer_and_wrench: Prerequisites
 **NB.** The setup is tested on `macOS Big Sur`.
 
-Docker Desktop [installed](https://docs.docker.com/install/)
+Docker Desktop [installed](https://hub.docker.com/editions/community/docker-ce-desktop-mac/)
 ```sh
-# If you don't want to sign up in order to download Docker
-# use the following command to download the installer directly
-$ curl -s https://download.docker.com/mac/stable/Docker.dmg
+$ brew install docker
 ```
 
 Kubectl (at least version 1.18) [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
