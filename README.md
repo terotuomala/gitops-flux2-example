@@ -74,8 +74,9 @@ Includes the Flux configuration per cluster.
         └── infrastructure.yaml
 ```
 
-The `<CLUSTER_ENVIRONMENT>/apps.yaml` defines the path for Kustomize patch which includes the environment specific values. Note that the path refers to different repository. For example the [infrastructure/sources/api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) refers to repository https://github.com/terotuomala/k8s-express-api-example which has the Kustomization files in `k8s/<CLUSTER_ENVIRONMENT>/api` directory.
-```
+The `<CLUSTER_ENVIRONMENT>/apps.yaml` defines the path for Kustomize patch which includes the environment specific values. Note that the `path` refers to a directory which is at different GitHub repository.
+
+```yaml
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
 metadata:
@@ -85,18 +86,22 @@ spec:
   interval: 1m
   dependsOn:
     - name: infrastructure
-  path: "./k8s/staging/api"
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: api
-  validation: client
-  healthChecks:
-    - kind: Deployment
-      name: api
-      namespace: api
-  timeout: 80s
-  ```
+  path: "./k8s/staging" # https://github.com/terotuomala/k8s-express-api-example/tree/main/k8s/staging
+.....
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: client
+  namespace: flux-system
+spec:
+  interval: 1m
+  dependsOn:
+    - name: infrastructure
+  path: "./k8s/staging" # https://github.com/terotuomala/k8s-create-react-app-example/tree/main/k8s/staging
+.....
+```
 
 <!-- PREREQUISITES -->
 ## :hammer_and_wrench: Prerequisites
