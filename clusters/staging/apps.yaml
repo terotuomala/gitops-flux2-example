@@ -7,7 +7,7 @@ spec:
   interval: 1m
   dependsOn:
     - name: infrastructure
-  path: "./k8s/overlays/staging/api"
+  path: "./k8s/staging"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -29,7 +29,7 @@ spec:
   interval: 1m
   dependsOn:
     - name: infrastructure
-  path: "./k8s/overlays/staging/client"
+  path: "./k8s/staging"
   prune: true
   sourceRef:
     kind: GitRepository
