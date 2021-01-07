@@ -7,4 +7,4 @@ spec:
   interval: 1m
   url: https://github.com/terotuomala/k8s-express-api-example
   ref:
-    branch: master
+    branch: main
