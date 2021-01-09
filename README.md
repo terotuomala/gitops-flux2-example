@@ -27,7 +27,7 @@
 
 <!-- EXMAPLE APPLICATION -->
 ## :performing_arts: Example Application
-The example application consist from [Client](https://github.com/terotuomala/k8s-create-react-app-example) (Create React App) and [REST API](https://github.com/terotuomala/k8s-express-api-example) with Cache (Node.js + Express + Redis)
+The example application consist from [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) (Create React App) and [REST API](https://github.com/terotuomala/k8s-express-api-example) with Cache (Node.js + Express.js + Redis)
 
 <!-- FLUX DIRECTORY STRUCTURE -->
 ## :card_file_box: Flux directory structure
