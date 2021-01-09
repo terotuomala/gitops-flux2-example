@@ -20,12 +20,13 @@ jobs:
       - name: Check for updates
         id: update
         run: |
-          flux install --arch=amd64 \
+          LONG_VERSION="$(flux -v)"
+          VERSION="v${LONG_VERSION#*flux version }"
+
+          flux install --version="${VERSION}" \
             --export > ./clusters/staging/flux-system/gotk-components.yaml
 
-          LONG_VERSION_NAME="$(flux -v)"
-          SHORT_VERSION_NAME="v${LONG_VERSION_NAME#*flux version }"
-          echo "::set-output name=flux_version::$SHORT_VERSION_NAME"
+          echo "::set-output name=flux_version::$VERSION"
 
       - name: Create Pull Request for Flux update
         uses: peter-evans/create-pull-request@v3
