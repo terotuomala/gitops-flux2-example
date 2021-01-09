@@ -1,14 +1,14 @@
 # GitOps workflow example using Flux2
 
-> Inspired by excellent [Flux2 example](https://github.com/fluxcd/flux2-kustomize-helm-example).
-
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents 
 * [Features](#features)
 * [Example application](#example-application)
+* [Flux directory structure](#flux-directory-structure)
 * [Prerequisites](#prerequisites)
 * [Usage](#usage)
 * [Kustomize configuration](#kustomize-configuration)
+* [Thanks](#thanks)
 
 <!-- FEATURES -->
 ## :rocket: Features 
@@ -23,11 +23,10 @@
 - Environment variable loading based on the present working directory using [direnv](https://github.com/direnv/direnv)
 - Kubernetes manifest validation using [pre-commit](https://github.com/pre-commit/pre-commit)
 
-<!-- EXAMPLE APPLICATION -->
 ## :performing_arts: Example Application
 The example application consist from [Client](https://github.com/terotuomala/k8s-create-react-app-example) (Create React App) and [REST API](https://github.com/terotuomala/k8s-express-api-example) with Cache (Node.js + Express + Redis)
 
-## :card_file_box: Folder structure
+## :card_file_box: Flux directory structure
 The folders are structured based on the [Flux2 example](https://github.com/fluxcd/flux2-kustomize-helm-example).
 
 ```
@@ -103,7 +102,6 @@ spec:
 .....
 ```
 
-<!-- PREREQUISITES -->
 ## :hammer_and_wrench: Prerequisites
 **NB.** The setup is tested on `macOS Big Sur`.
 
@@ -137,7 +135,6 @@ Kubectx [installed](https://github.com/ahmetb/kubectx)
 $ brew install kubectx
 ```
 
-<!-- USAGE -->
 ## :keyboard: Usage
 Create a local `staging` k3s cluster:
 ```sh
@@ -183,3 +180,8 @@ $ flux bootstrap github \
     --personal \
     --path=clusters/production
 ```
+
+## :raised_hands: Thanks
+Inspired by these excellent projects: 
+- https://github.com/fluxcd/flux2-kustomize-helm-example
+- https://github.com/onedr0p/home-cluster
