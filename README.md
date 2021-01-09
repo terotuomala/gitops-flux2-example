@@ -2,15 +2,15 @@
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents 
-* [Features](#features)
-* [Example application](#:performing_arts:-example-application)
-* [Flux directory structure](#flux-directory-structure)
+* [Features](#rocket-features)
+* [Example application](#performing_arts-example-application)
+* [Flux directory structure](#card_file_box-flux-directory-structure)
   * [Infrastructure](#infrastructure)
   * [Clusters](#clusters)
-* [Prerequisites](#prerequisites)
-* [Usage](#usage)
+* [Prerequisites](#hammer_and_wrench-prerequisites)
+* [Usage](#keyboard-usage)
 * [Kustomize configuration](#kustomize-configuration)
-* [Thanks](#thanks)
+* [Thanks](#pray-thanks)
 
 <!-- FEATURES -->
 ## :rocket: Features
