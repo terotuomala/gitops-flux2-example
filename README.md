@@ -23,9 +23,11 @@
 - Environment variable loading based on the present working directory using [direnv](https://github.com/direnv/direnv)
 - Kubernetes manifest validation using [pre-commit](https://github.com/pre-commit/pre-commit)
 
+<!-- EXMAPLE APPLICATION -->
 ## :performing_arts: Example Application
 The example application consist from [Client](https://github.com/terotuomala/k8s-create-react-app-example) (Create React App) and [REST API](https://github.com/terotuomala/k8s-express-api-example) with Cache (Node.js + Express + Redis)
 
+<!-- FLUX DIRECTORY STRUCTURE -->
 ## :card_file_box: Flux directory structure
 The folders are structured based on the [Flux2 example](https://github.com/fluxcd/flux2-kustomize-helm-example).
 
@@ -102,6 +104,7 @@ spec:
 .....
 ```
 
+<!-- PREREQUISITES -->
 ## :hammer_and_wrench: Prerequisites
 **NB.** The setup is tested on `macOS Big Sur`.
 
@@ -135,6 +138,7 @@ Kubectx [installed](https://github.com/ahmetb/kubectx)
 $ brew install kubectx
 ```
 
+<!-- USAGE -->
 ## :keyboard: Usage
 Create a local `staging` k3s cluster:
 ```sh
@@ -181,7 +185,8 @@ $ flux bootstrap github \
     --path=clusters/production
 ```
 
-## :raised_hands: Thanks
+<!-- THANKS -->
+## :pray: Thanks
 Inspired by these excellent projects: 
 - https://github.com/fluxcd/flux2-kustomize-helm-example
 - https://github.com/onedr0p/home-cluster
