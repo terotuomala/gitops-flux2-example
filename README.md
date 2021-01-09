@@ -3,15 +3,17 @@
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents 
 * [Features](#features)
-* [Example application](#example-application)
+* [Example application](#:performing_arts:-example-application)
 * [Flux directory structure](#flux-directory-structure)
+  * [Infrastructure](#infrastructure)
+  * [Clusters](#clusters)
 * [Prerequisites](#prerequisites)
 * [Usage](#usage)
 * [Kustomize configuration](#kustomize-configuration)
 * [Thanks](#thanks)
 
 <!-- FEATURES -->
-## :rocket: Features 
+## :rocket: Features
 - Local [K3s](https://github.com/rancher/k3s) staging and production clusters  using [K3d](https://github.com/rancher/k3d)
 - Example application (separate repositories) including [Client](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
 - Application configuration customization using [Kustomize](https://github.com/kubernetes-sigs/kustomize)
