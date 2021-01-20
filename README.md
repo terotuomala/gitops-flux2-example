@@ -9,14 +9,12 @@
   * [Clusters](#clusters)
 * [Prerequisites](#hammer_and_wrench-prerequisites)
 * [Usage](#keyboard-usage)
-* [Kustomize configuration](#kustomize-configuration)
 * [Thanks](#pray-thanks)
 
 <!-- FEATURES -->
 ## :rocket: Features
 - Local [K3s](https://github.com/rancher/k3s) staging and production clusters  using [K3d](https://github.com/rancher/k3d)
-- Example application (separate repositories) including [Client](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
-- Application configuration customization using [Kustomize](https://github.com/kubernetes-sigs/kustomize)
+- Example application (separate repositories) including [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
 - Continuous Delivery with GitOps workflow using [Flux2](https://github.com/fluxcd/flux2)
 - Progressive delivery with canary releases using [Flagger](https://github.com/weaveworks/flagger)
 - Kubernetes configuration best practises using [Kyverno](https://github.com/kyverno/kyverno)
