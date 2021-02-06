@@ -145,7 +145,7 @@ $ k3d cluster create gitops-example-staging \
     --port "8081:80@loadbalancer" \
     --k3s-server-arg '--no-deploy=traefik' \
     --k3s-server-arg '--flannel-backend=none' \
-    --volume "$(pwd)/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
+    --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
     --wait
 ```
 Make sure your KUBECONFIG points to staging k3s cluster context:
@@ -175,7 +175,7 @@ $ k3d cluster create gitops-example-production \
     --port "8081:80@loadbalancer" \
     --k3s-server-arg '--no-deploy=traefik' \
     --k3s-server-arg '--flannel-backend=none' \
-    --volume "$(pwd)/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
+    --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
     --wait
 ```
 Make sure your KUBECONFIG points to production k3s cluster context:
