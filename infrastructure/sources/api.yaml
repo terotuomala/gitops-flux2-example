@@ -6,7 +6,8 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  url: https://github.com/terotuomala/k8s-express-api-example
+  # url: https://github.com/terotuomala/k8s-express-api-example
+  url: ssh://git@github.com/terotuomala/k8s-express-api-example
   ref:
     branch: main
   secretRef:
