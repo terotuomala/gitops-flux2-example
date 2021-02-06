@@ -1,7 +1,8 @@
 # GitOps workflow example using Flux2
+[![Lint](https://github.com/terotuomala/gitops-flux2-example/workflows/lint/badge.svg)](https://github.com/terotuomala/gitops-flux2-example/actions)
 
 <!-- TABLE OF CONTENTS -->
-## Table of Contents 
+## Table of Contents
 * [Features](#rocket-features)
 * [Example application](#performing_arts-example-application)
 * [Flux directory structure](#card_file_box-flux-directory-structure)
@@ -137,12 +138,12 @@ $ brew install direnv
 ## :keyboard: Usage
 Create a local `staging` k3s cluster:
 ```sh
-$ k3d cluster create gitops-example-staging \ 
-    --servers 1 \ 
+$ k3d cluster create gitops-example-staging \
+    --servers 1 \
     --agents 1 \
-    --api-port 6550 \ 
-    --port "8081:80@loadbalancer" \ 
-    --k3s-server-arg '--no-deploy=traefik' \ 
+    --api-port 6550 \
+    --port "8081:80@loadbalancer" \
+    --k3s-server-arg '--no-deploy=traefik' \
     --k3s-server-arg '--flannel-backend=none' \
     --volume "$(pwd)/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
     --wait
@@ -167,12 +168,12 @@ $ flux bootstrap github \
 ```
 Next create local `production` k3s cluster:
 ```sh
-$ k3d cluster create gitops-example-production \ 
-    --servers 1 \ 
+$ k3d cluster create gitops-example-production \
+    --servers 1 \
     --agents 1 \
-    --api-port 6550 \ 
-    --port "8081:80@loadbalancer" \ 
-    --k3s-server-arg '--no-deploy=traefik' \ 
+    --api-port 6550 \
+    --port "8081:80@loadbalancer" \
+    --k3s-server-arg '--no-deploy=traefik' \
     --k3s-server-arg '--flannel-backend=none' \
     --volume "$(pwd)/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
     --wait
@@ -198,6 +199,6 @@ $ flux bootstrap github \
 
 <!-- THANKS -->
 ## :pray: Thanks
-Inspired by these excellent projects: 
+Inspired by these excellent projects:
 - https://github.com/fluxcd/flux2-kustomize-helm-example
 - https://github.com/onedr0p/home-cluster
