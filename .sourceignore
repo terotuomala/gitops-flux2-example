@@ -2,5 +2,6 @@
 # https://toolkit.fluxcd.io/components/source/gitrepositories/#excluding-files
 .github/
 .gitignore
+.pre-commit-config.yaml
 *.md
 LICENSE
