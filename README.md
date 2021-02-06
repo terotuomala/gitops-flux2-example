@@ -133,20 +133,23 @@ Direnv [installed](https://direnv.net/docs/installation.html)
 $ brew install direnv
 ```
 
-Kubectx [installed](https://github.com/ahmetb/kubectx)
-```sh
-$ brew install kubectx
-```
-
 <!-- USAGE -->
 ## :keyboard: Usage
 Create a local `staging` k3s cluster:
 ```sh
-$ k3d cluster create gitops-example-staging --agents 1 --update-default-kubeconfig
+$ k3d cluster create gitops-example-staging \ 
+    --servers 1 \ 
+    --agents 1 \
+    --api-port 6550 \ 
+    --port "8081:80@loadbalancer" \ 
+    --k3s-server-arg '--no-deploy=traefik' \ 
+    --k3s-server-arg '--flannel-backend=none' \
+    --volume "$(pwd)/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
+    --wait
 ```
 Make sure your KUBECONFIG points to staging k3s cluster context:
 ```sh
-$ kubectx k3d-gitops-example-staging
+$ kubectl config use-context k3d-gitops-example-staging
 ```
 Verify that staging k3s cluster satisfies the prerequisites:
 ```sh
@@ -164,11 +167,19 @@ $ flux bootstrap github \
 ```
 Next create local `production` k3s cluster:
 ```sh
-$ k3d cluster create gitops-example-production --agents 1 --update-default-kubeconfig
+$ k3d cluster create gitops-example-production \ 
+    --servers 1 \ 
+    --agents 1 \
+    --api-port 6550 \ 
+    --port "8081:80@loadbalancer" \ 
+    --k3s-server-arg '--no-deploy=traefik' \ 
+    --k3s-server-arg '--flannel-backend=none' \
+    --volume "$(pwd)/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
+    --wait
 ```
 Make sure your KUBECONFIG points to production k3s cluster context:
 ```sh
-$ kubectx k3d-gitops-example-production
+$ kubectl config use-context k3d-gitops-example-production
 ```
 Verify that production k3s cluster satisfies the prerequisites:
 ```sh
