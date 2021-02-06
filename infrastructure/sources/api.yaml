@@ -1,3 +1,4 @@
+---
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
@@ -8,3 +9,5 @@ spec:
   url: https://github.com/terotuomala/k8s-express-api-example
   ref:
     branch: main
+  secretRef:
+    name: ssh-credentials
