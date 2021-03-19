@@ -140,9 +140,9 @@ Create a local `staging` k3s cluster:
 ```sh
 $ k3d cluster create gitops-example-staging \
     --servers 1 \
-    --agents 1 \
+    --agents 2 \
     --api-port 6550 \
-    --port "8081:80@loadbalancer" \
+    --port "80:80@loadbalancer" \
     --k3s-server-arg '--no-deploy=traefik' \
     --k3s-server-arg '--flannel-backend=none' \
     --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
@@ -164,7 +164,9 @@ $ flux bootstrap github \
     --repository=${GITHUB_REPO} \
     --branch=main \
     --personal \
-    --path=clusters/staging
+    --path=clusters/staging \
+    --version=v0.9.0 \
+    --network-policy=false
 ```
 Next create local `production` k3s cluster:
 ```sh
