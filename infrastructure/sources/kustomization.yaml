@@ -4,6 +4,8 @@ kind: Kustomization
 namespace: flux-system
 resources:
   - bitnami.yaml
+  - jetstack.yaml
+  - kubernetes-sigs.yaml
   # - sealed-secrets.yaml
   - api.yaml
   - client.yaml
