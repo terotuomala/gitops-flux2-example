@@ -1,4 +1,5 @@
-name: lint
+---
+name: Lint
 
 on:
   pull_request:
@@ -6,8 +7,7 @@ on:
 
 jobs:
   lint-yaml:
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -17,5 +17,5 @@ jobs:
     - name: Lint YAML
       uses: ibiqlik/action-yamllint@v3
       with:
-        file_or_dir: "./k8s"
+        file_or_dir: "./clusters"
         config_file: "./.github/yamllint.config.yaml"
