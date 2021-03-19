@@ -1,4 +1,5 @@
-name: update-flux
+---
+name: Upgrade Flux
 
 on:
   workflow_dispatch:
@@ -7,7 +8,7 @@ on:
 
 jobs:
   components:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -17,7 +18,7 @@ jobs:
       - name: Setup Flux CLI
         uses: fluxcd/flux2/action@main
 
-      - name: Check for updates
+      - name: Upgrade Flux
         id: update
         run: |
           LONG_VERSION="$(flux -v)"
@@ -32,7 +33,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
             token: ${{ secrets.GITHUB_TOKEN }}
-            title: "Update Flux to version ${{ steps.update.outputs.flux_version }} [skip ci]"
+            title: "Update Flux to version ${{ steps.update.outputs.flux_version }}"
             committer: "${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>"
             author: "${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>"
             assignees: "${{ github.repository_owner }}"
@@ -41,4 +42,4 @@ jobs:
             commit-message: "Update Flux to version ${{ steps.update.outputs.flux_version }} [skip ci]"
             body: |
               Release notes: https://github.com/fluxcd/flux2/releases/tag/${{ steps.update.outputs.flux_version }}
-            labels: flux/update
+            labels: flux/upgrade
