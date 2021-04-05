@@ -7,5 +7,7 @@ master:
     enabled: false
 networkPolicy:
   enabled: true
+  ingressNSMatchLabels:
+    name: api
   ingressNSPodMatchLabels:
-    api: true
+    app: api
