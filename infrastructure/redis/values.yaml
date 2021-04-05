@@ -5,3 +5,7 @@ cluster:
 master:
   persistence:
     enabled: false
+networkPolicy:
+  enabled: true
+  ingressNSPodMatchLabels:
+    api: true
