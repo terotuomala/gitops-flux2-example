@@ -142,7 +142,7 @@ $ k3d cluster create gitops-example-staging \
     --servers 1 \
     --agents 2 \
     --api-port 6550 \
-    --port "80:80@loadbalancer" \
+    --port "8080:80@loadbalancer" \
     --k3s-server-arg '--no-deploy=traefik' \
     --k3s-server-arg '--flannel-backend=none' \
     --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
@@ -165,7 +165,7 @@ $ flux bootstrap github \
     --branch=main \
     --personal \
     --path=clusters/staging \
-    --version=v0.9.0 \
+    --version=v0.11.0 \
     --network-policy=false
 ```
 Next create local `production` k3s cluster:
@@ -174,7 +174,7 @@ $ k3d cluster create gitops-example-production \
     --servers 1 \
     --agents 1 \
     --api-port 6550 \
-    --port "8081:80@loadbalancer" \
+    --port "8080:80@loadbalancer" \
     --k3s-server-arg '--no-deploy=traefik' \
     --k3s-server-arg '--flannel-backend=none' \
     --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
@@ -196,7 +196,9 @@ $ flux bootstrap github \
     --repository=${GITHUB_REPO} \
     --branch=main \
     --personal \
-    --path=clusters/production
+    --path=clusters/production \
+    --version=v0.11.0 \
+    --network-policy=false
 ```
 
 <!-- THANKS -->
