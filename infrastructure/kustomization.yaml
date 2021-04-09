@@ -5,6 +5,5 @@ resources:
   - sources
   - nginx
   - redis
-  - flagger
   - descheduler
   # - sealed-secrets

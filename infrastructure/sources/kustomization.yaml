@@ -5,7 +5,6 @@ namespace: flux-system
 resources:
   - bitnami.yaml
   - kubernetes-sigs.yaml
-  - flagger.yaml
   # - sealed-secrets.yaml
   - api.yaml
   - client.yaml
