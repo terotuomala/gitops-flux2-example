@@ -6,4 +6,5 @@ resources:
   - nginx
   - redis
   - descheduler
+  - kyverno
   # - sealed-secrets
