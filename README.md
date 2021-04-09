@@ -17,16 +17,16 @@
 - Local [K3s](https://github.com/rancher/k3s) staging and production clusters  using [K3d](https://github.com/rancher/k3d)
 - Example application (separate repositories) including [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
 - Continuous Delivery with GitOps workflow using [Flux2](https://github.com/fluxcd/flux2)
-- Progressive delivery with canary releases using [Flagger](https://github.com/weaveworks/flagger)
-- Kubernetes configuration best practises using [Kyverno](https://github.com/kyverno/kyverno)
+- Policies to secure Kubernetes Pods using [Kyverno](https://github.com/kyverno/kyverno)
 - Network traffic flow control using [Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
-- Kubernetes Secrets using [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 - Environment variable loading based on the present working directory using [direnv](https://github.com/direnv/direnv)
 - Kubernetes manifest validation using [pre-commit](https://github.com/pre-commit/pre-commit)
 
 <!-- EXMAPLE APPLICATION -->
 ## :performing_arts: Example Application
-The example application consist from [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) (Create React App) and [REST API](https://github.com/terotuomala/k8s-express-api-example) with Cache (Node.js + Express.js + Redis)
+The example application consist from: 
+- [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) (Create React App)
+- [REST API](https://github.com/terotuomala/k8s-express-api-example) with in-memory data store (Node.js + Express.js + Redis)
 
 <!-- FLUX DIRECTORY STRUCTURE -->
 ## :card_file_box: Flux directory structure
@@ -34,6 +34,9 @@ The folders are structured based on the [Flux2 example](https://github.com/fluxc
 
 ```
 ├── infrastructure
+│   ├── calico
+│   ├── descheduler
+│   ├── kyverno
 │   ├── nginx
 │   ├── redis
 │   └── sources
@@ -42,10 +45,19 @@ The folders are structured based on the [Flux2 example](https://github.com/fluxc
     └── production
 ```
 ### Infrastructure
-Includes `nginx` and `redis` configurations as well as `Helm Repository` definitions. It also includes example application `Git Repository` definitions ([api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) and [client.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/client.yaml))
+Includes `calico`, `descheduler`, `kyverno`, `nginx` and `redis` configurations as well as `Helm Repository` definitions. It also includes example application `Git Repository` definitions ([api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) and [client.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/client.yaml))
 
 ```
 └── infrastructure
+    ├── calico
+    │   └── calico.yaml
+    ├── descheduler
+    │   ├── kustomization.yaml
+    │   └── release.yaml
+    ├── kyverno
+    │   ├── kustomization.yaml
+    │   ├── namespace.yaml
+    │   └── release.yaml
     ├── nginx
     │   ├── kustomization.yaml
     │   ├── namespace.yaml
@@ -60,7 +72,9 @@ Includes `nginx` and `redis` configurations as well as `Helm Repository` definit
         ├── api.yaml
         ├── bitnami.yaml
         ├── client.yaml
-        └── kustomization.yaml
+        ├── kubernetes-sigs.yaml
+        ├── kustomization.yaml
+        └── kyverno.yaml
 ```
 
 ### Clusters
@@ -124,7 +138,7 @@ Flux CLI [installed](https://toolkit.fluxcd.io/guides/installation/)
 $ brew install fluxcd/tap/flux
 ```
 
-K3d (at least version v3.4.0) [installed](https://github.com/rancher/k3d)
+K3d (at least version v4.4.0) [installed](https://github.com/rancher/k3d)
 ```sh
 $ brew install k3d
 ```
@@ -132,6 +146,12 @@ $ brew install k3d
 Direnv [installed](https://direnv.net/docs/installation.html)
 ```sh
 $ brew install direnv
+```
+Fork your own copy of this repository to your GitHub account and create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). After that create an `.envrc` file to the root of the repository folder and change the values to match yours:
+```sh
+export GITHUB_TOKEN=<PERSONAL_ACCESS_TOKEN>
+export GITHUB_USER=<GITHUB_USERNAME>
+export GITHUB_REPO=<GITHUB_REPO_NAME>
 ```
 
 <!-- USAGE -->
