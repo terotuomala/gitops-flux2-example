@@ -14,13 +14,14 @@
 
 <!-- FEATURES -->
 ## :rocket: Features
-- Local [K3s](https://github.com/rancher/k3s) staging and production clusters  using [K3d](https://github.com/rancher/k3d)
+- Local [K3s](https://github.com/rancher/k3s) staging and production clusters (with Calico instead of Flannel) using [K3d](https://github.com/rancher/k3d)
 - Example application (separate repositories) including [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
 - Continuous Delivery with GitOps workflow using [Flux2](https://github.com/fluxcd/flux2)
+- Scheduled upgrade check of Flux2 using [Renovate](https://docs.renovatebot.com)
 - Policies to secure Kubernetes Pods using [Kyverno](https://github.com/kyverno/kyverno)
 - Network traffic flow control using [Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
-- Environment variable loading based on the present working directory using [direnv](https://github.com/direnv/direnv)
-- Kubernetes manifest validation using [pre-commit](https://github.com/pre-commit/pre-commit)
+- Environment variable loading using [direnv](https://github.com/direnv/direnv)
+- YAML validation using [yamllint](https://github.com/adrienverge/yamllint)
 
 <!-- EXMAPLE APPLICATION -->
 ## :performing_arts: Example Application
@@ -90,7 +91,7 @@ Includes the Flux configuration per cluster.
         └── infrastructure.yaml
 ```
 
-The `<CLUSTER_ENVIRONMENT>/apps.yaml` defines the path for Kustomize patch which includes the environment specific values. Note that the `path` refers to a directory which is at different GitHub repository.
+The `clusters/<CLUSTER_ENVIRONMENT>/apps.yaml` defines the path for Kustomize patch which includes the environment specific values. Note that the `path` refers to a directory which is at different GitHub repository.
 
 ```yaml
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
@@ -147,12 +148,17 @@ Direnv [installed](https://direnv.net/docs/installation.html)
 ```sh
 $ brew install direnv
 ```
-Fork your own copy of this repository to your GitHub account and create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). After that create an `.envrc` file to the root of the repository folder and change the values to match yours:
+Fork your own copy of this repository to your GitHub account and create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). Next create an `.envrc` file to the root of the repository folder with the following content and change the values to match yours:
 ```sh
 export GITHUB_TOKEN=<PERSONAL_ACCESS_TOKEN>
 export GITHUB_USER=<GITHUB_USERNAME>
 export GITHUB_REPO=<GITHUB_REPO_NAME>
 ```
+By default the `direnv` security mechanism does now allow to load the `.envrc` file. In order to allow its execution use command:
+```sh
+$ direnv allow .
+```
+**NB.** the `.envrc` file is intentionally untracked and it should not be committed to git.
 
 <!-- USAGE -->
 ## :keyboard: Usage
