@@ -1,5 +1,5 @@
 # GitOps workflow example using Flux2
-[![Lint](https://github.com/terotuomala/gitops-flux2-example/workflows/lint/badge.svg)](https://github.com/terotuomala/gitops-flux2-example/actions)
+[![Lint](https://github.com/terotuomala/gitops-flux2-example/workflows/Lint/badge.svg)](https://github.com/terotuomala/gitops-flux2-example/actions)
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
@@ -154,7 +154,7 @@ export GITHUB_TOKEN=<PERSONAL_ACCESS_TOKEN>
 export GITHUB_USER=<GITHUB_USERNAME>
 export GITHUB_REPO=<GITHUB_REPO_NAME>
 ```
-By default the `direnv` security mechanism does now allow to load the `.envrc` file. In order to allow its execution use command:
+By default the `direnv` security mechanism does not allow to load the `.envrc` file. In order to allow its execution use command:
 ```sh
 $ direnv allow .
 ```
