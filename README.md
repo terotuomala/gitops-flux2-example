@@ -15,7 +15,7 @@
 <!-- FEATURES -->
 ## :rocket: Features
 - Local [K3s](https://github.com/rancher/k3s) staging and production clusters (with Calico instead of Flannel) using [K3d](https://github.com/rancher/k3d)
-- Example application (separate repositories) including [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
+- Example applications (separate repositories) including [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
 - Continuous Delivery with GitOps workflow using [Flux2](https://github.com/fluxcd/flux2)
 - Scheduled upgrade check of Flux2 using [Renovate](https://docs.renovatebot.com)
 - Policies to secure Kubernetes Pods using [Kyverno](https://github.com/kyverno/kyverno)
@@ -25,9 +25,11 @@
 
 <!-- EXMAPLE APPLICATION -->
 ## :performing_arts: Example Application
-The example application consist from: 
+The example applications consist from: 
 - [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) (Create React App)
 - [REST API](https://github.com/terotuomala/k8s-express-api-example) with in-memory data store (Node.js + Express.js + Redis)
+
+The applications are located in separated GitHub repositories and are deployed to the K3s cluster using Flux2.
 
 <!-- FLUX DIRECTORY STRUCTURE -->
 ## :card_file_box: Flux directory structure
@@ -46,7 +48,7 @@ The folders are structured based on the [Flux2 example](https://github.com/fluxc
     └── production
 ```
 ### Infrastructure
-Includes `calico`, `descheduler`, `kyverno`, `nginx` and `redis` configurations as well as `Helm Repository` definitions. It also includes example application `Git Repository` definitions ([api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) and [client.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/client.yaml))
+Includes `calico`, `descheduler`, `kyverno`, `nginx` and `redis` configurations as well as `Helm Repository` definitions. It also includes example applications `Git Repository` definitions ([api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) and [client.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/client.yaml))
 
 ```
 └── infrastructure
@@ -144,21 +146,12 @@ K3d (at least version v4.4.0) [installed](https://github.com/rancher/k3d)
 $ brew install k3d
 ```
 
-Direnv [installed](https://direnv.net/docs/installation.html)
-```sh
-$ brew install direnv
-```
-Fork your own copy of this repository to your GitHub account and create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). Next create an `.envrc` file to the root of the repository folder with the following content and change the values to match yours:
+Fork your own copy of this repository to your GitHub account and create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and export the following variables:
 ```sh
 export GITHUB_TOKEN=<PERSONAL_ACCESS_TOKEN>
 export GITHUB_USER=<GITHUB_USERNAME>
 export GITHUB_REPO=<GITHUB_REPO_NAME>
 ```
-By default the `direnv` security mechanism does not allow to load the `.envrc` file. In order to allow its execution use command:
-```sh
-$ direnv allow .
-```
-**NB.** the `.envrc` file is intentionally untracked and it should not be committed to git.
 
 <!-- USAGE -->
 ## :keyboard: Usage
@@ -191,16 +184,30 @@ $ flux bootstrap github \
     --branch=main \
     --personal \
     --path=clusters/staging \
-    --version=v0.11.0 \
     --network-policy=false
 ```
-Next create local `production` k3s cluster:
+Flux2 is configured to deploy content of the `infrastructure` items using Helm before the application. 
+
+Verify that the infrastructure Helm releases are synchronized to the cluster:
+```sh
+$ flux get helmreleases --all-namespaces
+```
+
+Verify that the api and client applications are synchronized to the cluster:
+```sh
+$ flux get kustomizations
+```
+
+The Single-page Application should be accessible from `http://localhost:8080` and REST API from `http://api.localhost:8080`.
+
+
+**(Optional)** create a local `production` k3s cluster:
 ```sh
 $ k3d cluster create gitops-example-production \
     --servers 1 \
-    --agents 1 \
+    --agents 2 \
     --api-port 6550 \
-    --port "8080:80@loadbalancer" \
+    --port "8081:80@loadbalancer" \
     --k3s-server-arg '--no-deploy=traefik' \
     --k3s-server-arg '--flannel-backend=none' \
     --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
@@ -223,7 +230,6 @@ $ flux bootstrap github \
     --branch=main \
     --personal \
     --path=clusters/production \
-    --version=v0.11.0 \
     --network-policy=false
 ```
 
