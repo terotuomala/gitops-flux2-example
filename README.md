@@ -157,7 +157,7 @@ export GITHUB_REPO=<GITHUB_REPO_NAME>
 
 <!-- USAGE -->
 ## :keyboard: Usage
-Both K3s clusters are using Calico instead of Flannel in order to be able to use NetworkPolicy.
+> Both K3s clusters are using Calico instead of Flannel in order to be able to use Network Policies.
 
 ### Local K3s staging cluster
 Create the cluster:
