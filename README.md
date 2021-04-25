@@ -14,7 +14,7 @@
 
 <!-- FEATURES -->
 ## :rocket: Features
-- Local [K3s](https://github.com/rancher/k3s) staging and production clusters (with Calico instead of Flannel) using [K3d](https://github.com/rancher/k3d)
+- Local [K3s](https://github.com/rancher/k3s) staging and production clusters using [K3d](https://github.com/rancher/k3d)
 - Example applications (separate repositories) including [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
 - Continuous Delivery with GitOps workflow using [Flux2](https://github.com/fluxcd/flux2)
 - Scheduled upgrade check of Flux2 using [Renovate](https://docs.renovatebot.com)
@@ -155,7 +155,10 @@ export GITHUB_REPO=<GITHUB_REPO_NAME>
 
 <!-- USAGE -->
 ## :keyboard: Usage
-Create a local `staging` k3s cluster:
+Both K3s clusters are using Calico instead of Flannel in order to be able to use NetworkPolicy.
+
+### Local K3s staging cluster
+Create the cluster:
 ```sh
 $ k3d cluster create gitops-example-staging \
     --servers 1 \
@@ -186,9 +189,7 @@ $ flux bootstrap github \
     --path=clusters/staging \
     --network-policy=false
 ```
-Flux2 is configured to deploy content of the `infrastructure` items using Helm before the application. 
-
-Verify that the infrastructure Helm releases are synchronized to the cluster:
+Flux2 is configured to deploy content of the `infrastructure` items using Helm before the application. Verify that the infrastructure Helm releases are synchronized to the cluster:
 ```sh
 $ flux get helmreleases --all-namespaces
 ```
@@ -198,10 +199,12 @@ Verify that the api and client applications are synchronized to the cluster:
 $ flux get kustomizations
 ```
 
-The Single-page Application should be accessible from `http://localhost:8080` and REST API from `http://api.localhost:8080`.
+The example applications should be accessible via Ingress: 
+- Single-page Application: `http://localhost:8080`
+- REST API: `http://api.localhost:8080`
 
-
-**(Optional)** create a local `production` k3s cluster:
+### (Optional) Local K3s production cluster
+Create the cluster:
 ```sh
 $ k3d cluster create gitops-example-production \
     --servers 1 \
@@ -232,6 +235,21 @@ $ flux bootstrap github \
     --path=clusters/production \
     --network-policy=false
 ```
+
+Verify that the infrastructure Helm releases are synchronized to the cluster:
+```sh
+$ flux get helmreleases --all-namespaces
+```
+
+Verify that the api and client applications are synchronized to the cluster:
+```sh
+$ flux get kustomizations
+```
+
+The example applications should be accessible via Ingress: 
+- Single-page Application: `http://localhost:8081`
+- REST API: `http://api.localhost:8081`
+
 
 <!-- THANKS -->
 ## :pray: Thanks
