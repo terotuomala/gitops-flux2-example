@@ -183,7 +183,7 @@ kubectl config use-context k3d-gitops-example-staging
 ```
 Verify that Calico controller deployment is ready:
 ```sh
-kubectl -n kube-system get deployments/calico-kube-controllers
+watch kubectl -n kube-system get deployments/calico-kube-controllers
 ```
 Verify that staging k3s cluster satisfies flux2 prerequisites:
 ```sh
@@ -201,12 +201,12 @@ flux bootstrap github \
 ```
 Flux2 is configured to deploy content of the `infrastructure` items using Helm before the application. Verify that the infrastructure Helm releases are synchronized to the cluster:
 ```sh
-flux get helmreleases --all-namespaces
+watch flux get helmreleases --all-namespaces
 ```
 
 Verify that the api and client applications are synchronized to the cluster:
 ```sh
-flux get kustomizations
+watch flux get kustomizations
 ```
 
 The example applications should be accessible via Ingress: 
