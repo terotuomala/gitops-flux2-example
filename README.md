@@ -1,11 +1,12 @@
 # GitOps workflow example using Flux2
 [![Lint](https://github.com/terotuomala/gitops-flux2-example/workflows/Lint/badge.svg)](https://github.com/terotuomala/gitops-flux2-example/actions)
 
-A simple example of managing local K3s clusters (staging and production) including example applications using Flux2, Helm and Kustomize.
+A simple example of managing multiple local K3s clusters including example applications using Flux2, Helm and Kustomize.
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 * [Features](#rocket-features)
+* [Overview](#mag-overview)
 * [Example application](#performing_arts-example-application)
 * [Flux directory structure](#card_file_box-flux-directory-structure)
   * [Infrastructure](#infrastructure)
@@ -25,13 +26,17 @@ A simple example of managing local K3s clusters (staging and production) includi
 - Environment variable loading using [direnv](https://github.com/direnv/direnv)
 - YAML validation using [yamllint](https://github.com/adrienverge/yamllint)
 
+<!-- OVERVIEW -->
+## :mag: Overview
+https://github.com/kubernetes/community/tree/master/icons
+
 <!-- EXMAPLE APPLICATION -->
 ## :performing_arts: Example Application
-The example applications consist from: 
+> The applications are located in separated GitHub repositories and are deployed to the K3s cluster using Flux2.
+
+The example applications  consist from: 
 - [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) (Create React App)
 - [REST API](https://github.com/terotuomala/k8s-express-api-example) with in-memory data store (Node.js + Express.js + Redis)
-
-The applications are located in separated GitHub repositories and are deployed to the K3s cluster using Flux2.
 
 <!-- FLUX DIRECTORY STRUCTURE -->
 ## :card_file_box: Flux directory structure
@@ -176,7 +181,11 @@ Make sure your KUBECONFIG points to staging k3s cluster context:
 ```sh
 $ kubectl config use-context k3d-gitops-example-staging
 ```
-Verify that staging k3s cluster satisfies the prerequisites:
+Verify that Calico controller deployment is ready:
+```sh
+$ kubectl -n kube-system get deployments/calico-kube-controllers
+```
+Verify that staging k3s cluster satisfies flux2 prerequisites:
 ```sh
 $ flux check --pre
 ```
@@ -188,8 +197,7 @@ $ flux bootstrap github \
     --repository=${GITHUB_REPO} \
     --branch=main \
     --personal \
-    --path=clusters/staging \
-    --network-policy=false
+    --path=clusters/staging
 ```
 Flux2 is configured to deploy content of the `infrastructure` items using Helm before the application. Verify that the infrastructure Helm releases are synchronized to the cluster:
 ```sh
@@ -203,7 +211,7 @@ $ flux get kustomizations
 
 The example applications should be accessible via Ingress: 
 - Single-page Application: `http://localhost:8080`
-- REST API: `http://api.localhost:8080`
+- REST API: `http://api.localhost:8080/api/v1`
 
 ### (Optional) Local K3s production cluster
 Create the cluster:
@@ -234,8 +242,7 @@ $ flux bootstrap github \
     --repository=${GITHUB_REPO} \
     --branch=main \
     --personal \
-    --path=clusters/production \
-    --network-policy=false
+    --path=clusters/production
 ```
 
 Verify that the infrastructure Helm releases are synchronized to the cluster:
