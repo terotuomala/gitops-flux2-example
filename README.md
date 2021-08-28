@@ -135,22 +135,22 @@ spec:
 
 Docker Desktop [installed](https://hub.docker.com/editions/community/docker-ce-desktop-mac/)
 ```sh
-$ brew install docker
+brew install docker
 ```
 
 Kubectl (at least version 1.18) [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 ```sh
-$ brew install kubernetes-cli
+brew install kubernetes-cli
 ```
 
 Flux CLI [installed](https://toolkit.fluxcd.io/guides/installation/)
 ```sh
-$ brew install fluxcd/tap/flux
+brew install fluxcd/tap/flux
 ```
 
 K3d (at least version v4.4.0) [installed](https://github.com/rancher/k3d)
 ```sh
-$ brew install k3d
+brew install k3d
 ```
 
 Fork your own copy of this repository to your GitHub account and create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and export the following variables:
@@ -167,46 +167,46 @@ export GITHUB_REPO=<GITHUB_REPO_NAME>
 ### Local K3s staging cluster
 Create the cluster:
 ```sh
-$ k3d cluster create gitops-example-staging \
-    --servers 1 \
-    --agents 2 \
-    --api-port 6550 \
-    --port "8080:80@loadbalancer" \
-    --k3s-server-arg '--no-deploy=traefik' \
-    --k3s-server-arg '--flannel-backend=none' \
-    --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
-    --wait
+k3d cluster create gitops-example-staging \
+  --servers 1 \
+  --agents 2 \
+  --api-port 6550 \
+  --port "8080:80@loadbalancer" \
+  --k3s-server-arg '--no-deploy=traefik' \
+  --k3s-server-arg '--flannel-backend=none' \
+  --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
+  --wait
 ```
 Make sure your KUBECONFIG points to staging k3s cluster context:
 ```sh
-$ kubectl config use-context k3d-gitops-example-staging
+kubectl config use-context k3d-gitops-example-staging
 ```
 Verify that Calico controller deployment is ready:
 ```sh
-$ kubectl -n kube-system get deployments/calico-kube-controllers
+kubectl -n kube-system get deployments/calico-kube-controllers
 ```
 Verify that staging k3s cluster satisfies flux2 prerequisites:
 ```sh
-$ flux check --pre
+flux check --pre
 ```
 Install Flux and configure it to manage itself from a Git repository:
 ```sh
-$ flux bootstrap github \
-    --context=k3d-gitops-example-staging \
-    --owner=${GITHUB_USER} \
-    --repository=${GITHUB_REPO} \
-    --branch=main \
-    --personal \
-    --path=clusters/staging
+flux bootstrap github \
+  --context=k3d-gitops-example-staging \
+  --owner=${GITHUB_USER} \
+  --repository=${GITHUB_REPO} \
+  --branch=main \
+  --personal \
+  --path=clusters/staging
 ```
 Flux2 is configured to deploy content of the `infrastructure` items using Helm before the application. Verify that the infrastructure Helm releases are synchronized to the cluster:
 ```sh
-$ flux get helmreleases --all-namespaces
+flux get helmreleases --all-namespaces
 ```
 
 Verify that the api and client applications are synchronized to the cluster:
 ```sh
-$ flux get kustomizations
+flux get kustomizations
 ```
 
 The example applications should be accessible via Ingress: 
@@ -216,43 +216,43 @@ The example applications should be accessible via Ingress:
 ### (Optional) Local K3s production cluster
 Create the cluster:
 ```sh
-$ k3d cluster create gitops-example-production \
-    --servers 1 \
-    --agents 2 \
-    --api-port 6550 \
-    --port "8081:80@loadbalancer" \
-    --k3s-server-arg '--no-deploy=traefik' \
-    --k3s-server-arg '--flannel-backend=none' \
-    --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
-    --wait
+k3d cluster create gitops-example-production \
+  --servers 1 \
+  --agents 2 \
+  --api-port 6550 \
+  --port "8081:80@loadbalancer" \
+  --k3s-server-arg '--no-deploy=traefik' \
+  --k3s-server-arg '--flannel-backend=none' \
+  --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
+  --wait
 ```
 Make sure your KUBECONFIG points to production k3s cluster context:
 ```sh
-$ kubectl config use-context k3d-gitops-example-production
+kubectl config use-context k3d-gitops-example-production
 ```
 Verify that production k3s cluster satisfies the prerequisites:
 ```sh
-$ flux check --pre
+flux check --pre
 ```
 Install Flux and configure it to manage itself from a Git repository:
 ```sh
-$ flux bootstrap github \
-    --context=k3d-gitops-example-production \
-    --owner=${GITHUB_USER} \
-    --repository=${GITHUB_REPO} \
-    --branch=main \
-    --personal \
-    --path=clusters/production
+flux bootstrap github \
+  --context=k3d-gitops-example-production \
+  --owner=${GITHUB_USER} \
+  --repository=${GITHUB_REPO} \
+  --branch=main \
+  --personal \
+  --path=clusters/production
 ```
 
 Verify that the infrastructure Helm releases are synchronized to the cluster:
 ```sh
-$ flux get helmreleases --all-namespaces
+flux get helmreleases --all-namespaces
 ```
 
 Verify that the api and client applications are synchronized to the cluster:
 ```sh
-$ flux get kustomizations
+flux get kustomizations
 ```
 
 The example applications should be accessible via Ingress: 
