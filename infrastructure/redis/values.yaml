@@ -1,10 +1,8 @@
 ---
-usePassword: false
-cluster:
+architecture: standalone
+auth:
   enabled: false
-master:
-  persistence:
-    enabled: false
+  usePassword: false
 networkPolicy:
   enabled: true
   allowExternal: false
