@@ -2,7 +2,7 @@
 architecture: standalone
 auth:
   enabled: false
-  usePassword: false
+  sentinel: false
 networkPolicy:
   enabled: true
   allowExternal: false
