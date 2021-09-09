@@ -7,12 +7,12 @@ networkPolicy:
   enabled: true
   allowExternal: false
   extraIngress:
-    from:
-      - namespaceSelector:
-          matchLabels:
-            name: api
-        podSelector:
-          matchLabels:
-            app: api
-      - ports:
+    - ports:
          - port: 6379
+      from:
+        - namespaceSelector:
+            matchLabels:
+              name: api
+          podSelector:
+            matchLabels:
+              app: api
