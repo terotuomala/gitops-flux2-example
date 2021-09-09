@@ -5,7 +5,14 @@ auth:
   sentinel: false
 networkPolicy:
   enabled: true
-  ingressNSMatchLabels:
-    name: api
-  ingressNSPodMatchLabels:
-    app: api
+  allowExternal: false
+  extraIngress:
+    from:
+      - namespaceSelector:
+          matchLabels:
+            name: api
+        podSelector:
+          matchLabels:
+            app: api
+      - ports:
+         - port: 6379
