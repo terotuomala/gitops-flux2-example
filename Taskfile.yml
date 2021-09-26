@@ -1,0 +1,87 @@
+version: '3'
+
+tasks:
+  install-prerequisites:
+    cmds:
+      - brew install docker kubernetes-cli fluxcd/tap/flux k3d
+    silent: true
+  
+  create-staging-cluster:
+    cmds:
+      - >-
+        k3d cluster create gitops-example-staging
+        --image rancher/k3s:v1.19.14-k3s1
+        --servers 1
+        --agents 2
+        --api-port 6550
+        --port "8080:80@loadbalancer"
+        --k3s-server-arg '--no-deploy=traefik'
+        --k3s-server-arg '--flannel-backend=none'
+        --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml"
+        --wait
+
+      - kubectl config use-context k3d-gitops-example-staging
+    silent: true
+  
+  create-production-cluster:
+    cmds:
+      - >-
+        k3d cluster create gitops-example-production
+        --image rancher/k3s:v1.19.14-k3s1
+        --servers 1
+        --agents 2
+        --api-port 6550
+        --port "8080:80@loadbalancer"
+        --k3s-server-arg '--no-deploy=traefik'
+        --k3s-server-arg '--flannel-backend=none'
+        --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml"
+        --wait
+
+      - kubectl config use-context k3d-gitops-example-production
+    silent: true
+  
+  verify-calico:
+    cmds:
+      - watch kubectl -n kube-system get deployments/calico-kube-controllers
+    silent: true
+  
+  flux-check:
+    cmds:
+      - flux check --pre
+    silent: true
+
+  flux-bootstrap-staging:
+    cmds:
+      - >-
+        flux bootstrap github
+        --context=k3d-gitops-example-staging
+        --owner=${GITHUB_USER}
+        --repository=${GITHUB_REPO}
+        --branch=main
+        --personal
+        --network-policy=false
+        --path=clusters/staging
+    silent: true
+  
+  flux-bootstrap-production:
+    cmds:
+      - >-
+        flux bootstrap github
+        --context=k3d-gitops-example-production
+        --owner=${GITHUB_USER}
+        --repository=${GITHUB_REPO}
+        --branch=main
+        --personal
+        --network-policy=false
+        --path=clusters/production
+    silent: true
+
+  flux-hr:
+    cmds:
+      - flux get hr -A
+    silent: true
+  
+  flux-kz:
+    cmds:
+      - flux get kustomizations -A
+    silent: true
