@@ -23,7 +23,7 @@ A simple example of managing multiple local K3s clusters including example appli
 - Scheduled upgrade check of Flux2 using [Renovate](https://docs.renovatebot.com)
 - Policies to secure Kubernetes Pods using [Kyverno](https://github.com/kyverno/kyverno)
 - Network traffic flow control using [Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
-- Environment variable loading using [direnv](https://github.com/direnv/direnv)
+- Easy installation using [go-task](https://github.com/go-task/task)
 - YAML validation using [yamllint](https://github.com/adrienverge/yamllint)
 
 <!-- OVERVIEW -->
@@ -45,7 +45,6 @@ The folders are structured based on the [Flux2 example](https://github.com/fluxc
 ```
 ├── infrastructure
 │   ├── calico
-│   ├── descheduler
 │   ├── kyverno
 │   ├── nginx
 │   ├── redis
@@ -55,15 +54,12 @@ The folders are structured based on the [Flux2 example](https://github.com/fluxc
     └── production
 ```
 ### Infrastructure
-Includes `calico`, `descheduler`, `kyverno`, `nginx` and `redis` configurations as well as `Helm Repository` definitions. It also includes example applications `Git Repository` definitions ([api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) and [client.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/client.yaml))
+Includes `calico`, `kyverno`, `nginx` and `redis` configurations as well as `Helm Repository` definitions. It also includes example applications `Git Repository` definitions ([api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) and [client.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/client.yaml))
 
 ```
 └── infrastructure
     ├── calico
     │   └── calico.yaml
-    ├── descheduler
-    │   ├── kustomization.yaml
-    │   └── release.yaml
     ├── kyverno
     │   ├── kustomization.yaml
     │   ├── namespace.yaml
@@ -82,7 +78,6 @@ Includes `calico`, `descheduler`, `kyverno`, `nginx` and `redis` configurations 
         ├── api.yaml
         ├── bitnami.yaml
         ├── client.yaml
-        ├── kubernetes-sigs.yaml
         ├── kustomization.yaml
         └── kyverno.yaml
 ```
@@ -131,82 +126,70 @@ spec:
 
 <!-- PREREQUISITES -->
 ## :hammer_and_wrench: Prerequisites
-**NB.** The setup is tested on `macOS Big Sur`.
+> **NB.** The setup is tested on `macOS Big Sur`.
 
-Docker Desktop [installed](https://hub.docker.com/editions/community/docker-ce-desktop-mac/)
+The first prerequisite is to install [go-task](https://github.com/go-task/task) in order to make the setup a bit easier:
+
 ```sh
-brew install docker
+brew install go-task/tap/go-task
 ```
 
-Kubectl (at least version 1.18) [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-```sh
-brew install kubernetes-cli
-```
+> **NB.** The tasks used in the setup are defined in [Taskfile.yml](https://github.com/terotuomala/gitops-flux2-example/blob/taskfile/Taskfile.yml).
 
-Flux CLI [installed](https://toolkit.fluxcd.io/guides/installation/)
-```sh
-brew install fluxcd/tap/flux
-```
+The following prerequisites are used in order to create and manage the local K3s cluster(s):
 
-K3d (at least version v4.4.0) [installed](https://github.com/rancher/k3d)
+- [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-mac/)
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) (at least version 1.18)
+- [Flux CLI](https://toolkit.fluxcd.io/guides/installation/)
+- [K3d](https://github.com/rancher/k3d) (at least version v4.4.0)
+
+If you don't have them installed yet you can install them using [install-prerequisites](https://github.com/terotuomala/gitops-flux2-example/blob/taskfile/Taskfile.yml#L4) task:
+
 ```sh
-brew install k3d
+task install-prerequisites
 ```
 
 Fork your own copy of this repository to your GitHub account and create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and export the following variables:
 ```sh
-export GITHUB_TOKEN=<PERSONAL_ACCESS_TOKEN>
-export GITHUB_USER=<GITHUB_USERNAME>
-export GITHUB_REPO=<GITHUB_REPO_NAME>
+export GITHUB_TOKEN=<YOUR_PERSONAL_ACCESS_TOKEN>
+export GITHUB_USER=<YOUR_GITHUB_USERNAME>
+export GITHUB_REPO=<YOUR_FORKED_GITHUB_REPO_NAME>
 ```
 
 <!-- USAGE -->
 ## :keyboard: Usage
-> Both K3s clusters are using Calico instead of Flannel in order to be able to use Network Policies.
+> **NB.** Both K3s clusters are using Calico instead of Flannel in order to be able to use Network Policies.
 
 ### Local K3s staging cluster
 Create the cluster:
+
 ```sh
-k3d cluster create gitops-example-staging \
-  --servers 1 \
-  --agents 2 \
-  --api-port 6550 \
-  --port "8080:80@loadbalancer" \
-  --k3s-server-arg '--no-deploy=traefik' \
-  --k3s-server-arg '--flannel-backend=none' \
-  --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
-  --wait
+task create-staging-cluster
 ```
-Make sure your KUBECONFIG points to staging k3s cluster context:
-```sh
-kubectl config use-context k3d-gitops-example-staging
-```
+
 Verify that Calico controller deployment is ready:
 ```sh
-watch kubectl -n kube-system get deployments/calico-kube-controllers
+task verify-calico
 ```
+
 Verify that staging k3s cluster satisfies flux2 prerequisites:
 ```sh
-flux check --pre
+task flux-check
 ```
+
 Install Flux and configure it to manage itself from a Git repository:
 ```sh
-flux bootstrap github \
-  --context=k3d-gitops-example-staging \
-  --owner=${GITHUB_USER} \
-  --repository=${GITHUB_REPO} \
-  --branch=main \
-  --personal \
-  --path=clusters/staging
+task flux-bootstrap-staging
 ```
+
 Flux2 is configured to deploy content of the `infrastructure` items using Helm before the application. Verify that the infrastructure Helm releases are synchronized to the cluster:
 ```sh
-watch flux get helmreleases --all-namespaces
+task flux-hr
 ```
 
 Verify that the api and client applications are synchronized to the cluster:
 ```sh
-watch flux get kustomizations
+task flux-kz
 ```
 
 The example applications should be accessible via Ingress: 
@@ -215,44 +198,34 @@ The example applications should be accessible via Ingress:
 
 ### (Optional) Local K3s production cluster
 Create the cluster:
+
 ```sh
-k3d cluster create gitops-example-production \
-  --servers 1 \
-  --agents 2 \
-  --api-port 6550 \
-  --port "8081:80@loadbalancer" \
-  --k3s-server-arg '--no-deploy=traefik' \
-  --k3s-server-arg '--flannel-backend=none' \
-  --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml" \
-  --wait
+task create-production-cluster
 ```
-Make sure your KUBECONFIG points to production k3s cluster context:
+
+Verify that Calico controller deployment is ready:
 ```sh
-kubectl config use-context k3d-gitops-example-production
+task verify-calico
 ```
-Verify that production k3s cluster satisfies the prerequisites:
+
+Verify that production k3s cluster satisfies flux2 prerequisites:
 ```sh
-flux check --pre
+task flux-check
 ```
+
 Install Flux and configure it to manage itself from a Git repository:
 ```sh
-flux bootstrap github \
-  --context=k3d-gitops-example-production \
-  --owner=${GITHUB_USER} \
-  --repository=${GITHUB_REPO} \
-  --branch=main \
-  --personal \
-  --path=clusters/production
+task flux-bootstrap-production
 ```
 
 Verify that the infrastructure Helm releases are synchronized to the cluster:
 ```sh
-flux get helmreleases --all-namespaces
+task flux-hr
 ```
 
 Verify that the api and client applications are synchronized to the cluster:
 ```sh
-flux get kustomizations
+task flux-kz
 ```
 
 The example applications should be accessible via Ingress: 
