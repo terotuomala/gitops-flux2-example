@@ -2,11 +2,13 @@ version: '3'
 
 tasks:
   install-prerequisites:
+    desc: Install prerequisites (docker, kubectl, flux, k3d)
     cmds:
       - brew install docker kubernetes-cli fluxcd/tap/flux k3d
     silent: true
   
   create-staging-cluster:
+    desc: Install staging k3s cluster
     cmds:
       - >-
         k3d cluster create gitops-example-staging
@@ -24,6 +26,7 @@ tasks:
     silent: true
   
   create-production-cluster:
+    desc: Install production k3s cluster
     cmds:
       - >-
         k3d cluster create gitops-example-production
@@ -41,16 +44,19 @@ tasks:
     silent: true
   
   verify-calico:
+    desc: Verify that calico controller is deployed
     cmds:
       - watch kubectl -n kube-system get deployments/calico-kube-controllers
     silent: true
   
   flux-check:
+    desc: Run flux pre check
     cmds:
       - flux check --pre
     silent: true
 
   flux-bootstrap-staging:
+    desc: Bootstrap flux for staging k3s cluster
     cmds:
       - >-
         flux bootstrap github
@@ -64,6 +70,7 @@ tasks:
     silent: true
   
   flux-bootstrap-production:
+    desc: Bootstrap flux for production k3s cluster
     cmds:
       - >-
         flux bootstrap github
@@ -77,11 +84,13 @@ tasks:
     silent: true
 
   flux-hr:
+    desc: List all Helm Releases
     cmds:
       - flux get hr -A
     silent: true
   
   flux-kz:
+    desc: List all Kustomizations
     cmds:
       - flux get kustomizations -A
     silent: true
