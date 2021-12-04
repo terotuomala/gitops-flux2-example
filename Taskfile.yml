@@ -15,8 +15,8 @@ tasks:
         --agents 2
         --api-port 6550
         --port "8080:80@loadbalancer"
-        --k3s-server-arg '--no-deploy=traefik'
-        --k3s-server-arg '--flannel-backend=none'
+        --k3s-arg '--disable=traefik@server:0'
+        --k3s-arg '--flannel-backend=none@server:0'
         --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml"
         --wait
 
@@ -32,8 +32,8 @@ tasks:
         --agents 2
         --api-port 6550
         --port "8080:80@loadbalancer"
-        --k3s-server-arg '--no-deploy=traefik'
-        --k3s-server-arg '--flannel-backend=none'
+        --k3s-arg '--disable=traefik@server:0'
+        --k3s-arg '--flannel-backend=none@server:0'
         --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml"
         --wait
 
