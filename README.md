@@ -46,6 +46,7 @@ The folders are structured based on the [Flux2 example](https://github.com/fluxc
 ├── infrastructure
 │   ├── calico
 │   ├── kyverno
+│   ├── kyverno-policies
 │   ├── nginx
 │   ├── redis
 │   └── sources
@@ -54,16 +55,17 @@ The folders are structured based on the [Flux2 example](https://github.com/fluxc
     └── cluster-2
 ```
 ### Infrastructure
-Includes `calico`, `kyverno`, `nginx` and `redis` configurations as well as `Helm Repository` definitions. It also includes example applications `Git Repository` definitions ([api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) and [client.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/client.yaml))
+Includes `calico`, `kyverno`, `kyverno-policies`, `nginx` and `redis` configurations as well as `Helm Repository` definitions. It also includes example applications `Git Repository` definitions ([api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) and [client.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/client.yaml))
 
 ```
 └── infrastructure
     ├── calico
     │   └── calico.yaml
     ├── kyverno
+    │   └── kustomization.yaml
+    ├── kyverno-policies
     │   ├── kustomization.yaml
-    │   ├── namespace.yaml
-    │   └── release.yaml
+    │   └── pod-security-restricted.yaml
     ├── nginx
     │   ├── kustomization.yaml
     │   ├── namespace.yaml
@@ -78,8 +80,7 @@ Includes `calico`, `kyverno`, `nginx` and `redis` configurations as well as `Hel
         ├── api.yaml
         ├── bitnami.yaml
         ├── client.yaml
-        ├── kustomization.yaml
-        └── kyverno.yaml
+        └── kustomization.yaml
 ```
 
 ### Clusters
