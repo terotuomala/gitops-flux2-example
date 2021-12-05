@@ -8,7 +8,7 @@ tasks:
     silent: true
   
   create-cluster1:
-    desc: Create k3s cluster-1 using k3d
+    desc: Create k3s cluster-1
     cmds:
       - >-
         k3d cluster create gitops-example-cluster-1
@@ -26,7 +26,7 @@ tasks:
     silent: true
   
   create-cluster2:
-    desc: Create k3s cluster-2 using k3d
+    desc: Create k3s cluster-2
     cmds:
       - >-
         k3d cluster create gitops-example-cluster-2
@@ -43,6 +43,18 @@ tasks:
       - kubectl config use-context k3d-gitops-example-cluster-2
     silent: true
   
+  delete-cluster1:
+    desc: Delete k3s cluster-1
+    cmds:
+      - k3d cluster delete gitops-example-cluster-1
+    silent: true
+
+  delete-cluster2:
+    desc: Delete k3s cluster-2
+    cmds:
+      - k3d cluster delete gitops-example-cluster-2
+    silent: true
+  
   verify-calico:
     desc: Verify that calico controller is deployed
     cmds:
@@ -56,7 +68,7 @@ tasks:
     silent: true
 
   flux-bootstrap-cluster1:
-    desc: Bootstrap flux for k3s cluster-1
+    desc: Bootstrap flux to k3s cluster-1
     cmds:
       - >-
         flux bootstrap github
@@ -66,11 +78,11 @@ tasks:
         --branch=main
         --personal
         --network-policy=false
-        --path=clusters/staging
+        --path=clusters/cluster-1
     silent: true
   
   flux-bootstrap-cluster2:
-    desc: Bootstrap flux for k3s cluster-2
+    desc: Bootstrap flux to k3s cluster-2
     cmds:
       - >-
         flux bootstrap github
@@ -80,5 +92,5 @@ tasks:
         --branch=main
         --personal
         --network-policy=false
-        --path=clusters/production
+        --path=clusters/cluster-2
     silent: true
