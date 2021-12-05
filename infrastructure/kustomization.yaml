@@ -5,6 +5,4 @@ resources:
   - sources
   - nginx
   - redis
-  - descheduler
   - kyverno
-  # - sealed-secrets
