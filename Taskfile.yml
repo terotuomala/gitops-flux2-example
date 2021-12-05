@@ -8,7 +8,7 @@ tasks:
     silent: true
   
   create-cluster1:
-    desc: Install k3s cluster-1
+    desc: Create k3s cluster-1 using k3d
     cmds:
       - >-
         k3d cluster create gitops-example-cluster-1
@@ -26,7 +26,7 @@ tasks:
     silent: true
   
   create-cluster2:
-    desc: Install k3s cluster-2
+    desc: Create k3s cluster-2 using k3d
     cmds:
       - >-
         k3d cluster create gitops-example-cluster-2
