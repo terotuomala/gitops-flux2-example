@@ -17,7 +17,7 @@ A simple example of managing multiple local K3s clusters including example appli
 
 <!-- FEATURES -->
 ## :rocket: Features
-- Local [K3s](https://github.com/rancher/k3s) staging and production clusters using [K3d](https://github.com/rancher/k3d)
+- Two local [K3s](https://github.com/rancher/k3s) clusters using [K3d](https://github.com/rancher/k3d)
 - Example applications (separate repositories) including [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
 - Continuous Delivery with GitOps workflow using [Flux2](https://github.com/fluxcd/flux2)
 - Scheduled upgrade check of Flux2 using [Renovate](https://docs.renovatebot.com)
@@ -50,8 +50,8 @@ The folders are structured based on the [Flux2 example](https://github.com/fluxc
 │   ├── redis
 │   └── sources
 └── clusters
-    ├── staging
-    └── production
+    ├── cluster-1
+    └── cluster-2
 ```
 ### Infrastructure
 Includes `calico`, `kyverno`, `nginx` and `redis` configurations as well as `Helm Repository` definitions. It also includes example applications `Git Repository` definitions ([api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) and [client.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/client.yaml))
@@ -87,10 +87,10 @@ Includes the Flux configuration per cluster.
 
 ```
 └── clusters
-    ├── production
+    ├── cluster-1
     │   ├── apps.yaml
     │   └── infrastructure.yaml
-    └── staging
+    └── cluster-2
         ├── apps.yaml
         └── infrastructure.yaml
 ```
@@ -160,11 +160,11 @@ export GITHUB_REPO=<YOUR_FORKED_GITHUB_REPO_NAME>
 ## :keyboard: Usage
 > **NB.** Both K3s clusters are using Calico instead of Flannel in order to be able to use Network Policies.
 
-### Local K3s staging cluster
+### Local K3s cluster-1
 Create the cluster:
 
 ```sh
-task create-staging-cluster
+task create-cluster1
 ```
 
 Verify that Calico controller deployment is ready:
@@ -172,35 +172,35 @@ Verify that Calico controller deployment is ready:
 task verify-calico
 ```
 
-Verify that staging k3s cluster satisfies flux2 prerequisites:
+Verify that k3s cluster-1 satisfies flux2 prerequisites:
 ```sh
 task flux-check
 ```
 
 Install Flux and configure it to manage itself from a Git repository:
 ```sh
-task flux-bootstrap-staging
+task flux-bootstrap-cluster1
 ```
 
 Flux2 is configured to deploy content of the `infrastructure` items using Helm before the application. Verify that the infrastructure Helm releases are synchronized to the cluster:
 ```sh
-task flux-hr
+flux get hr -A
 ```
 
 Verify that the api and client applications are synchronized to the cluster:
 ```sh
-task flux-kz
+flux get kustomization -A
 ```
 
 The example applications should be accessible via Ingress: 
 - Single-page Application: `http://localhost:8080`
 - REST API: `http://api.localhost:8080/api/v1`
 
-### (Optional) Local K3s production cluster
+### (Optional) Local K3s cluster-2
 Create the cluster:
 
 ```sh
-task create-production-cluster
+task create-cluster2
 ```
 
 Verify that Calico controller deployment is ready:
@@ -208,24 +208,24 @@ Verify that Calico controller deployment is ready:
 task verify-calico
 ```
 
-Verify that production k3s cluster satisfies flux2 prerequisites:
+Verify that k3s cluster-2 satisfies flux2 prerequisites:
 ```sh
 task flux-check
 ```
 
 Install Flux and configure it to manage itself from a Git repository:
 ```sh
-task flux-bootstrap-production
+task flux-bootstrap-cluster2
 ```
 
 Verify that the infrastructure Helm releases are synchronized to the cluster:
 ```sh
-task flux-hr
+flux get hr -A
 ```
 
 Verify that the api and client applications are synchronized to the cluster:
 ```sh
-task flux-kz
+flux get kustomization -A
 ```
 
 The example applications should be accessible via Ingress: 
