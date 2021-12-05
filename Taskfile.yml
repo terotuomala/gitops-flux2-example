@@ -7,14 +7,14 @@ tasks:
       - brew install docker kubernetes-cli fluxcd/tap/flux k3d
     silent: true
   
-  create-staging-cluster:
-    desc: Install staging k3s cluster
+  create-cluster1:
+    desc: Install k3s cluster-1
     cmds:
       - >-
-        k3d cluster create gitops-example-staging
+        k3d cluster create gitops-example-cluster-1
         --image rancher/k3s:v1.22.4-k3s1
         --servers 1
-        --agents 2
+        --agents 1
         --api-port 6550
         --port "8080:80@loadbalancer"
         --k3s-arg '--disable=traefik@server:0'
@@ -22,25 +22,25 @@ tasks:
         --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml"
         --wait
 
-      - kubectl config use-context k3d-gitops-example-staging
+      - kubectl config use-context k3d-gitops-example-cluster-1
     silent: true
   
-  create-production-cluster:
-    desc: Install production k3s cluster
+  create-cluster2:
+    desc: Install k3s cluster-2
     cmds:
       - >-
-        k3d cluster create gitops-example-production
+        k3d cluster create gitops-example-cluster-2
         --image rancher/k3s:v1.22.4-k3s1
         --servers 1
-        --agents 2
+        --agents 1
         --api-port 6550
-        --port "8080:80@loadbalancer"
+        --port "8081:80@loadbalancer"
         --k3s-arg '--disable=traefik@server:0'
         --k3s-arg '--flannel-backend=none@server:0'
         --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml"
         --wait
 
-      - kubectl config use-context k3d-gitops-example-production
+      - kubectl config use-context k3d-gitops-example-cluster-2
     silent: true
   
   verify-calico:
@@ -55,12 +55,12 @@ tasks:
       - flux check --pre
     silent: true
 
-  flux-bootstrap-staging:
-    desc: Bootstrap flux for staging k3s cluster
+  flux-bootstrap-cluster1:
+    desc: Bootstrap flux for k3s cluster-1
     cmds:
       - >-
         flux bootstrap github
-        --context=k3d-gitops-example-staging
+        --context=k3d-gitops-example-cluster-1
         --owner=${GITHUB_USER}
         --repository=${GITHUB_REPO}
         --branch=main
@@ -69,12 +69,12 @@ tasks:
         --path=clusters/staging
     silent: true
   
-  flux-bootstrap-production:
-    desc: Bootstrap flux for production k3s cluster
+  flux-bootstrap-cluster2:
+    desc: Bootstrap flux for k3s cluster-2
     cmds:
       - >-
         flux bootstrap github
-        --context=k3d-gitops-example-production
+        --context=k3d-gitops-example-cluster-2
         --owner=${GITHUB_USER}
         --repository=${GITHUB_REPO}
         --branch=main
