@@ -1,5 +1,8 @@
 version: '3'
 
+vars:
+  K8S_VERSION: rancher/k3s:v1.22.4-k3s1
+
 tasks:
   install-prerequisites:
     desc: Install prerequisites (docker, kubectl, flux, k3d)
@@ -12,13 +15,14 @@ tasks:
     cmds:
       - >-
         k3d cluster create gitops-example-cluster-1
-        --image rancher/k3s:v1.22.4-k3s1
+        --image "{{.K8S_VERSION}}"
         --servers 1
-        --agents 1
+        --agents 2
         --api-port 6550
         --port "8080:80@loadbalancer"
         --k3s-arg '--disable=traefik@server:0'
         --k3s-arg '--flannel-backend=none@server:0'
+        --k3s-node-label "agent=true@agent:0,1"
         --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml"
         --wait
 
@@ -30,13 +34,14 @@ tasks:
     cmds:
       - >-
         k3d cluster create gitops-example-cluster-2
-        --image rancher/k3s:v1.22.4-k3s1
+        --image "{{.K8S_VERSION}}"
         --servers 1
-        --agents 1
+        --agents 2
         --api-port 6550
         --port "8081:80@loadbalancer"
         --k3s-arg '--disable=traefik@server:0'
         --k3s-arg '--flannel-backend=none@server:0'
+        --k3s-node-label "agent=true@agent:0,1"
         --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml"
         --wait
 
