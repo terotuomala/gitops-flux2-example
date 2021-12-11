@@ -5,7 +5,7 @@ auth:
   sentinel: false
 networkPolicy:
   enabled: true
-  allowExternal: false
+  allowExternal: true
   ingressNSMatchLabels:
     name: api
   ingressNSPodMatchLabels:
