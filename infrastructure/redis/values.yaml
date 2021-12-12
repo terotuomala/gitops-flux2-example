@@ -5,14 +5,4 @@ auth:
   sentinel: false
 networkPolicy:
   enabled: true
-  allowExternal: true
-  extraIngress:
-    - ports:
-        - port: 1234
-      from:
-        - namespaceSelector:
-            - matchLabels:
-                - name: api
-        - podSelector:
-            - matchLabels:
-              - app: api
+  allowExternal: false
