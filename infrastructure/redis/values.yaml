@@ -6,7 +6,13 @@ auth:
 networkPolicy:
   enabled: true
   allowExternal: true
-  ingressNSMatchLabels:
-    name: api
-  ingressNSPodMatchLabels:
-    app: api
+  extraIngress:
+    - ports:
+        - port: 1234
+      from:
+        - namespaceSelector:
+            - matchLabels:
+                - name: api
+        - podSelector:
+            - matchLabels:
+              - app: api
