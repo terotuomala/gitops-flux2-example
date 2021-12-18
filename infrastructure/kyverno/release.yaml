@@ -19,7 +19,4 @@ spec:
       retries: 3
   # Default values
   # https://github.com/kyverno/kyverno/blob/main/charts/kyverno/values.yaml
-  values:
-    networkPolicy:
-      enabled: true
 
