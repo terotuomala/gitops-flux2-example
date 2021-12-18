@@ -1,5 +1,5 @@
 ---
-apiVersion: helm.toolkit.fluxcd.io/v1beta1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: kyverno-policies
@@ -7,7 +7,7 @@ spec:
   releaseName: kyverno-policies
   chart:
     spec:
-      chart: kyverno
+      chart: kyverno-policies
       sourceRef:
         kind: HelmRepository
         name: kyverno
