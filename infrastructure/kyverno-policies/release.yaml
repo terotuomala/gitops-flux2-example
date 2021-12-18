@@ -14,6 +14,8 @@ spec:
         namespace: flux-system
       version: "2.x.x"
   interval: 1h0m0s
+  dependsOn:
+    - name: kyverno
   install:
     remediation:
       retries: 3
