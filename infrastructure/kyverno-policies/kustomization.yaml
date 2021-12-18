@@ -1,5 +1,6 @@
 ---
-apiVersion: kustomize.config.k8s.io/v1beta1
+apiVersion: kustomize.config.k8s.io/v2beta1
 kind: Kustomization
+namespace: kyverno
 resources:
-  - pod-security-restricted.yaml
+  - release.yaml
