@@ -1,5 +1,7 @@
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: kyverno
 resources:
-  - https://raw.githubusercontent.com/kyverno/kyverno/v1.5.1/definitions/release/install.yaml
+  - namespace.yaml
+  - release.yaml
