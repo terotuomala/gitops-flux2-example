@@ -7,7 +7,7 @@ spec:
   releaseName: kyverno-policies
   chart:
     spec:
-      chart: kyverno-policies
+      chart: kyverno
       sourceRef:
         kind: HelmRepository
         name: kyverno
