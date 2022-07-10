@@ -8,7 +8,7 @@ on:
 
 jobs:
   components:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -25,7 +25,7 @@ jobs:
           VERSION="v${LONG_VERSION#*flux version }"
 
           flux install --version="${VERSION}" \
-            --export > ./clusters/staging/flux-system/gotk-components.yaml
+            --export > ./clusters/cluster-1/flux-system/gotk-components.yaml
 
           echo "::set-output name=flux_version::$VERSION"
 
