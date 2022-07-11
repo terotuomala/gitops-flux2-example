@@ -197,42 +197,43 @@ The example applications should be accessible via Ingress:
 - Single-page Application: `http://localhost:8080`
 - REST API: `http://api.localhost:8080/api/v1`
 
-### (Optional) Local K3s cluster-2
-Create the cluster:
+<details>
+  <summary>### (Optional) Local K3s cluster-2</summary>
+  Create the cluster:
 
-```sh
-task create-cluster2
-```
+  ```sh
+  task create-cluster2
+  ```
 
-Verify that Calico controller deployment is ready:
-```sh
-task verify-calico
-```
+  Verify that Calico controller deployment is ready:
+  ```sh
+  task verify-calico
+  ```
 
-Verify that k3s cluster-2 satisfies flux2 prerequisites:
-```sh
-task flux-check
-```
+  Verify that k3s cluster-2 satisfies flux2 prerequisites:
+  ```sh
+  task flux-check
+  ```
 
-Install Flux and configure it to manage itself from a Git repository:
-```sh
-task flux-bootstrap-cluster2
-```
+  Install Flux and configure it to manage itself from a Git repository:
+  ```sh
+  task flux-bootstrap-cluster2
+  ```
 
-Verify that the infrastructure Helm releases are synchronized to the cluster:
-```sh
-flux get hr -A
-```
+  Verify that the infrastructure Helm releases are synchronized to the cluster:
+  ```sh
+  flux get hr -A
+  ```
 
-Verify that the api and client applications are synchronized to the cluster:
-```sh
-flux get kustomization -A
-```
+  Verify that the api and client applications are synchronized to the cluster:
+  ```sh
+  flux get kustomization -A
+  ```
 
-The example applications should be accessible via Ingress: 
-- Single-page Application: `http://localhost:8081`
-- REST API: `http://api.localhost:8081`
-
+  The example applications should be accessible via Ingress: 
+  - Single-page Application: `http://localhost:8081`
+  - REST API: `http://api.localhost:8081`
+</details>
 
 <!-- THANKS -->
 ## :pray: Thanks
