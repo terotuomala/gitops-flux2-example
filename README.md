@@ -197,8 +197,10 @@ The example applications should be accessible via Ingress:
 - Single-page Application: `http://localhost:8080`
 - REST API: `http://api.localhost:8080/api/v1`
 
+### Local K3s cluster-2
+
 <details>
-  <summary>(Optional) Local K3s cluster-2</summary>
+  <summary>(Optional)</summary>
   Create the cluster:
 
   ```sh
