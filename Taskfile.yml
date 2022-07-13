@@ -1,7 +1,7 @@
 version: '3'
 
 vars:
-  K8S_VERSION: rancher/k3s:v1.22.4-k3s1
+  K8S_VERSION: rancher/k3s:v1.23.8-k3s2
 
 tasks:
   install-prerequisites:
@@ -29,35 +29,10 @@ tasks:
       - kubectl config use-context k3d-gitops-example-cluster-1
     silent: true
   
-  create-cluster2:
-    desc: Create k3s cluster-2
-    cmds:
-      - >-
-        k3d cluster create gitops-example-cluster-2
-        --image "{{.K8S_VERSION}}"
-        --servers 1
-        --agents 2
-        --api-port 6550
-        --port "8081:80@loadbalancer"
-        --k3s-arg '--disable=traefik@server:0'
-        --k3s-arg '--flannel-backend=none@server:0'
-        --k3s-node-label "agent=true@agent:0,1"
-        --volume "$(pwd)/infrastructure/calico/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml"
-        --wait
-
-      - kubectl config use-context k3d-gitops-example-cluster-2
-    silent: true
-  
   delete-cluster1:
     desc: Delete k3s cluster-1
     cmds:
       - k3d cluster delete gitops-example-cluster-1
-    silent: true
-
-  delete-cluster2:
-    desc: Delete k3s cluster-2
-    cmds:
-      - k3d cluster delete gitops-example-cluster-2
     silent: true
   
   verify-calico:
@@ -84,18 +59,4 @@ tasks:
         --personal
         --network-policy=false
         --path=clusters/cluster-1
-    silent: true
-  
-  flux-bootstrap-cluster2:
-    desc: Bootstrap flux to k3s cluster-2
-    cmds:
-      - >-
-        flux bootstrap github
-        --context=k3d-gitops-example-cluster-2
-        --owner=${GITHUB_USER}
-        --repository=${GITHUB_REPO}
-        --branch=main
-        --personal
-        --network-policy=false
-        --path=clusters/cluster-2
     silent: true
