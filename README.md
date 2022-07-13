@@ -87,7 +87,7 @@ Includes the Flux configuration per cluster.
 
 ```
 └── clusters
-    ├── cluster-1
+    └── cluster-1
         ├── apps.yaml
         └── infrastructure.yaml
 ```
@@ -123,7 +123,7 @@ spec:
 
 <!-- PREREQUISITES -->
 ## :hammer_and_wrench: Prerequisites
-> **NB.** The setup is tested on `macOS Big Sur`.
+> **NB.** The setup is tested on `macOS Monterey`.
 
 The first prerequisite is to install [go-task](https://github.com/go-task/task) in order to make the setup a bit easier:
 
@@ -155,28 +155,28 @@ export GITHUB_REPO=<YOUR_FORKED_GITHUB_REPO_NAME>
 
 <!-- USAGE -->
 ## :keyboard: Usage
-> **NB.** Both K3s clusters are using Calico instead of Flannel in order to be able to use Network Policies.
+> **NB.** The K3s cluster is using Calico instead of Flannel in order to be able to use Network Policies.
 
 ### Local K3s cluster-1
 Create the cluster:
 
 ```sh
-task create-cluster1
+task k8s:create-cluster1
 ```
 
 Verify that Calico controller deployment is ready:
 ```sh
-task verify-calico
+task k8s:verify-calico
 ```
 
 Verify that k3s cluster-1 satisfies flux2 prerequisites:
 ```sh
-task flux-check
+task k8s:flux-check
 ```
 
 Install Flux and configure it to manage itself from a Git repository:
 ```sh
-task flux-bootstrap-cluster1
+task k8s:flux-bootstrap-cluster1
 ```
 
 Flux2 is configured to deploy content of the `infrastructure` items using Helm before the application. Verify that the infrastructure Helm releases are synchronized to the cluster:
