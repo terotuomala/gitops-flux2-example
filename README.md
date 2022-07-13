@@ -136,9 +136,9 @@ brew install go-task/tap/go-task
 The following prerequisites are used in order to create and manage the local K3s cluster(s):
 
 - [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-mac/)
-- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) (at least version 1.18)
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [Flux CLI](https://toolkit.fluxcd.io/guides/installation/)
-- [K3d](https://github.com/rancher/k3d) (at least version v4.4.0)
+- [K3d](https://github.com/rancher/k3d) (at least version v5.4.3)
 
 If you don't have them installed yet you can install them using [install-prerequisites](https://github.com/terotuomala/gitops-flux2-example/blob/taskfile/Taskfile.yml#L4) task:
 
