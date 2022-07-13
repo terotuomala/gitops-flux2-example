@@ -28,7 +28,7 @@ A simple example of managing multiple local K3s clusters including example appli
 
 <!-- OVERVIEW -->
 ## :mag: Overview
-https://github.com/kubernetes/community/tree/master/icons
+![Architecture](./architecture.svg)
 
 <!-- EXMAPLE APPLICATION -->
 ## :performing_arts: Example Application
