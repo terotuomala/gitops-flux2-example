@@ -17,7 +17,7 @@ A simple example of managing multiple local K3s clusters including example appli
 
 <!-- FEATURES -->
 ## :rocket: Features
-- Two local [K3s](https://github.com/rancher/k3s) clusters using [K3d](https://github.com/rancher/k3d)
+- Local [K3s](https://github.com/rancher/k3s) cluster using [K3d](https://github.com/rancher/k3d)
 - Example applications (separate repositories) including [Single-page Application](https://github.com/terotuomala/k8s-create-react-app-example) and [REST API](https://github.com/terotuomala/k8s-express-api-example)
 - Continuous Delivery with GitOps workflow using [Flux2](https://github.com/fluxcd/flux2)
 - Scheduled upgrade check of Flux2 using [Renovate](https://docs.renovatebot.com)
@@ -51,8 +51,7 @@ The folders are structured based on the [Flux2 example](https://github.com/fluxc
 │   ├── redis
 │   └── sources
 └── clusters
-    ├── cluster-1
-    └── cluster-2
+    └── cluster-1
 ```
 ### Infrastructure
 Includes `calico`, `kyverno`, `kyverno-policies`, `nginx` and `redis` configurations as well as `Helm Repository` definitions. It also includes example applications `Git Repository` definitions ([api.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/api.yaml) and [client.yaml](https://github.com/terotuomala/gitops-flux2-example/blob/main/infrastructure/sources/client.yaml))
@@ -89,9 +88,6 @@ Includes the Flux configuration per cluster.
 ```
 └── clusters
     ├── cluster-1
-    │   ├── apps.yaml
-    │   └── infrastructure.yaml
-    └── cluster-2
         ├── apps.yaml
         └── infrastructure.yaml
 ```
@@ -196,46 +192,6 @@ flux get kustomization -A
 The example applications should be accessible via Ingress: 
 - Single-page Application: `http://localhost:8080`
 - REST API: `http://api.localhost:8080`
-
-### Local K3s cluster-2
-
-<details>
-  <summary>(Optional)</summary>
-  Create the cluster:
-
-  ```sh
-  task create-cluster2
-  ```
-
-  Verify that Calico controller deployment is ready:
-  ```sh
-  task verify-calico
-  ```
-
-  Verify that k3s cluster-2 satisfies flux2 prerequisites:
-  ```sh
-  task flux-check
-  ```
-
-  Install Flux and configure it to manage itself from a Git repository:
-  ```sh
-  task flux-bootstrap-cluster2
-  ```
-
-  Verify that the infrastructure Helm releases are synchronized to the cluster:
-  ```sh
-  flux get hr -A
-  ```
-
-  Verify that the api and client applications are synchronized to the cluster:
-  ```sh
-  flux get kustomization -A
-  ```
-
-  The example applications should be accessible via Ingress: 
-  - Single-page Application: `http://localhost:8081`
-  - REST API: `http://api.localhost:8081`
-</details>
 
 <!-- THANKS -->
 ## :pray: Thanks
