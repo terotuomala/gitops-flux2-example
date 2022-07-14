@@ -95,7 +95,7 @@ Includes the Flux configuration per cluster.
 The `clusters/<CLUSTER_ENVIRONMENT>/apps.yaml` defines the path for Kustomize patch which includes the environment specific values. Note that the `path` refers to a directory which is at different GitHub repository.
 
 ```yaml
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
   name: api
@@ -108,7 +108,7 @@ spec:
 .....
 
 ---
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
   name: client
