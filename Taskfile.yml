@@ -63,7 +63,7 @@ tasks:
         --owner=${GITHUB_USER}
         --repository=${GITHUB_REPO}
         --branch=main
-        --personal
-        --network-policy=false
+        --personal=true
+        --private=false
         --path=clusters/cluster-1
     silent: true
