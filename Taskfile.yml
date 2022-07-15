@@ -6,6 +6,9 @@ vars:
 tasks:
   install-prerequisites:
     desc: Install prerequisites (docker, kubectl, flux, k3d)
+    preconditions:
+      - sh: command -v brew
+        msg: Homebrew is required but it's not installed. Aborting.
     cmds:
       - brew install docker kubernetes-cli fluxcd/tap/flux k3d
     silent: true
@@ -46,14 +49,14 @@ tasks:
       - watch kubectl -n kube-system get deployments/calico-kube-controllers
     silent: true
   
-  k8s:flux-check:
+  flux:check-prerequisites:
     deps: [k8s:use-local-k3s-context]
     desc: Run flux pre check against the local k3s cluster (cluster-1)
     cmds:
       - flux check --pre
     silent: true
 
-  k8s:flux-bootstrap-cluster1:
+  flux:bootstrap-cluster1:
     deps: [k8s:use-local-k3s-context]
     desc: Bootstrap flux to local k3s cluster (cluster-1)
     cmds:
@@ -67,3 +70,33 @@ tasks:
         --private=false
         --path=clusters/cluster-1
     silent: true
+
+  flux:reconcile:
+    deps: [k8s:use-local-k3s-context]
+    desc: Trigger a sync of the flux-system and apply changes to local k3s cluster (cluster-1)
+    cmds:
+      - flux reconcile kustomization flux-system --with-source
+  
+  flux:get-helmreleases:
+    deps: [k8s:use-local-k3s-context]
+    desc: List all Helm releases and their status in local k3s cluster (cluster-1)
+    cmds:
+      - flux get helmreleases -A
+  
+  flux:get-kustomizations:
+    deps: [k8s:use-local-k3s-context]
+    desc: List all kustomizations and their status in local k3s cluster (cluster-1)
+    cmds:
+      - flux get kustomization -A
+  
+  flux:get-helmrepositories:
+    deps: [k8s:use-local-k3s-context]
+    desc: List all Helm repositories and their status in local k3s cluster (cluster-1)
+    cmds:
+      - flux get sources helm -A
+  
+  flux:get-gitrepositories:
+    deps: [k8s:use-local-k3s-context]
+    desc: List all Git repositories and their status in local k3s cluster (cluster-1)
+    cmds:
+      - flux get sources git -A
