@@ -171,22 +171,28 @@ task k8s:verify-calico
 
 Verify that k3s cluster-1 satisfies flux2 prerequisites:
 ```sh
-task k8s:flux-check
+task flux:check-prerequisites
 ```
 
 Install Flux and configure it to manage itself from a Git repository:
 ```sh
-task k8s:flux-bootstrap-cluster1
+task flux:bootstrap-cluster1
 ```
 
 Flux2 is configured to deploy content of the `infrastructure` items using Helm before the application. Verify that the infrastructure Helm releases are synchronized to the cluster:
 ```sh
-flux get hr -A
+task flux:get-helmreleases
 ```
 
 Verify that the api and client applications are synchronized to the cluster:
 ```sh
-flux get kustomization -A
+task flux:get-kustomizations
+```
+
+You can also check Helm and Git repositories and their status:
+```sh
+task flux:get-helmrepositories
+task flux:get-gitrepositories
 ```
 
 The example applications should be accessible via Ingress: 
