@@ -68,6 +68,7 @@ tasks:
         --branch=main
         --personal=true
         --private=false
+        --network-policy=false
         --path=clusters/cluster-1
     silent: true
 
