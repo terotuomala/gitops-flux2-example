@@ -1,7 +1,7 @@
 # GitOps workflow example using Flux2
 [![Lint](https://github.com/terotuomala/gitops-flux2-example/workflows/Lint/badge.svg)](https://github.com/terotuomala/gitops-flux2-example/actions)
 
-A simple example of managing multiple local K3s clusters including example applications using Flux2, Helm and Kustomize.
+A simple example of managing local K3s cluster including example applications using Flux2, Helm and Kustomize.
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
